@@ -1,0 +1,28 @@
+{
+  "name": "stadvdb-mco2",
+  "version": "1.0.0",
+  "description": "web app for CRUD operations in MCO2 Transaction Management",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zerithe/STADVDB-MCO2.git"
+  },
+  "type": "module",
+  "author": "De Vera, Apa, Bautista, Antonio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zerithe/STADVDB-MCO2/issues"
+  },
+  "homepage": "https://github.com/Zerithe/STADVDB-MCO2#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.1",
+    "express-hbs": "^2.5.0",
+    "path": "^0.12.7",
+    "url": "^0.11.3"
+  }
+}
