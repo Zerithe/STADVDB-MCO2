@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import hbs from 'express-hbs';
 import mainRoute from './routes/mainRoute.js'
-
+import { Appointments } from './DBConn.js';
 //comment out which node you dont need
 import { localConnection } from './DBConn.js';
 // import { centralNodeConnection } from './DBConn.js';

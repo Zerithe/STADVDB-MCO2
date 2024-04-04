@@ -13,7 +13,7 @@ CREATE DATABASE all_appointments;
 
 USE all_appointments;
 
-CREATE TABLE appointments(apptid VARCHAR(255),   Hospital VARCHAR(255), Doctor VARCHAR(255), Location VARCHAR(255), PatientName VARCHAR(255), `status` VARCHAR(255), TimeQueued DATETIME(6), QueueDate DATETIME, StartTime DATETIME, EndTime DATETIME, type VARCHAR(255), `Virtual` VARCHAR(255));
+CREATE TABLE appointments(pxid VARCHAR(255), clinicid VARCHAR(255), doctorid VARCHAR(255), apptid VARCHAR(255),  `status` VARCHAR(255), TimeQueued DATETIME(6), QueueDate DATETIME, StartTime DATETIME, EndTime DATETIME, type VARCHAR(255), `Virtual` TINYINT, Hospital VARCHAR(255), mainspecialty VARCHAR(255), hospitalname VARCHAR(255), RegionName VARCHAR(255), Location VARCHAR(255));
 
 ```
 

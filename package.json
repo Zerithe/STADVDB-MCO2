@@ -19,11 +19,13 @@
   },
   "homepage": "https://github.com/Zerithe/STADVDB-MCO2#readme",
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",
     "express-hbs": "^2.5.0",
     "mysql2": "^3.9.3",
     "path": "^0.12.7",
+    "selenium-webdriver": "^4.19.0",
     "sequelize": "^6.37.2",
     "url": "^0.11.3"
   }

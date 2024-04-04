@@ -1,27 +1,45 @@
 <button id="insert">INSERT</button><br><br>
 
-<div id="insert-content" style="display: none;">
-    <form id="insert-content-form">
+<div id="insert-content" style="display: none; ">
+    <form id="insert-content-form" enctype="multipart/form-data">
         <label for="apptid-insert">Apptid: </label>
         <input type="text" id="apptid-insert" name="apptid-insert" required><br><br>
+        <label for="pxid-insert">Pxid: </label>
+        <input type="text" id="pxid-insert" name="pxid-insert" required><br><br>
+        <label for="clinicid-insert">Clinicid: </label>
+        <input type="text" id="clinicid-insert" name="clinicid-insert" required><br><br>
+        <label for="doctorid-insert">Doctorid: </label>
+        <input type="text" id="doctorid-insert" name="doctorid-insert" required><br><br>
         <label for="hospital-insert">Hospital: </label>
         <input type="text" id="hospital-insert" name="hospital-insert" required><br><br>
-        <label for="doctor-insert">Doctor: </label>
-        <input type="text" id="doctor-insert" name="doctor-insert" required><br><br>
-        Location:<br>
-        <label for="luzon">Luzon </label>
-        <input type="radio" id="luzon" name="location-insert" value="Luzon"><br>
-        <label for="visayas">Visayas </label>
-        <input type="radio" id="visayas" name="location-insert" value="Visayas"><br>
-        <label for="mindanao">Mindanao </label>
-        <input type="radio" id="mindanao" name="location-insert" value="Mindanao"><br>
-        <label for="patientname-insert">Patient Name: </label>
-        <input type="text" id="patientname-insert" name="patientname-insert" required><br><br>
+        <label for="mainspecialty-insert">mainSpecialty: </label>
+        <input type="text" id="mainspecialty-insert" name="mainspecialty-insert" required><br><br>
+        Region:<br>
+        <label for="region-insert">NCR </label>
+        <input type="radio" id="region-insert" name="region-insert" value="National Capital Region (NCR)" required><br>
+        <label for="region-insert">CALABARZON (IV-A)</label>
+        <input type="radio" id="region-insert" name="region-insert" value="CALABARZON (IV-A)"><br>
+        <label for="region-insert">Ilocos Region (I) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Ilocos Region (I)"><br>
+        <label for="region-insert">Bicol Region (V) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Bicol Region (V)"><br>
+        <label for="region-insert">Central Luzon (III) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Central Luzon (III)"><br>
+        <label for="region-insert">Central Visayas (VII) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Central Visayas (VII)"><br>
+        <label for="region-insert">Eastern Visayas (VIII) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Eastern Visayas (VIII)"><br>
+        <label for="region-insert">Western Visayas (VI) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Western Visayas (VI)"><br>
+        <label for="region-insert">SOCCSKSARGEN (Cotabato Region) (XII) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
+        <label for="region-insert">Northern Mindanao (X) </label>
+        <input type="radio" id="region-insert" name="region-insert" value="Northern Mindanao (X)"><br><br>
         Status:<br>
-        <label for="queued">Queued </label>
-        <input type="radio" id="queued" name="status-insert" value="Queued"><br>
+        <label for="status-insert">Queued </label>
+        <input type="radio" id="status-insert" name="status-insert" value="Queued" required><br>
         <label for="complete">Complete </label>
-        <input type="radio" id="complete" name="status-insert" value="Complete"><br><br>
+        <input type="radio" id="status-insert" name="status-insert" value="Complete"><br><br>
         <label for="timequeued-insert">Time Queued: </label>
         <input type="datetime-local" id="timequeued-insert" name="timequeued-insert" required><br><br>
         <label for="queuedate-insert">Queue Date: </label>
@@ -33,20 +51,86 @@
         <label for="type-insert">Type: </label>
         <input type="text" id="type-insert" name="type-insert" required><br><br><br>
         Virtual:<br>
-        <label for="true">True </label>
-        <input type="radio" id="true" name="virtual-insert" value="True"><br>
-        <label for="false">False </label>
-        <input type="radio" id="false" name="virtual-insert" value="False"><br><br>
-        
-        <input type="submit" value="Submit Appointment">
+        <label for="virtual-insert">True </label>
+        <input type="radio" id="virtual-insert" name="virtual-insert" value="1" required><br>
+        <label for="virtual-insert">False </label>
+        <input type="radio" id="virtual-insert" name="virtual-insert" value="0"><br><br>
+        <input type="submit" id="submit-insert" value="Submit Appointment">
         
     </form>
     <div id="insert-results"></div>
 </div>
 
 <button id="update">UPDATE</button><br><br>
+
+<div id="update-content" style="display: none;">
+    <form id="update-content-form">
+        <label for="apptid-update-search">Enter Apptid to update appointment</label>
+        <input type="text" id="apptid-update-search" name="apptid-update-search" requried><br><br><br>
+        <label for="apptid-update">Apptid: </label>
+        <input type="text" id="apptid-update" name="apptid-update"><br><br>
+        <label for="pxid-update">Pxid: </label>
+        <input type="text" id="pxid-update" name="pxid-update"><br><br>
+        <label for="clinicid-update">Clinicid: </label>
+        <input type="text" id="clinicid-update" name="clinicid-update"><br><br>
+        <label for="doctorid-update">Doctorid: </label>
+        <input type="text" id="doctorid-update" name="doctorid-update"><br><br>
+        <label for="hospital-update">Hospital: </label>
+        <input type="text" id="hospital-update" name="hospital-update"><br><br>
+        <label for="mainspecialty-update">mainSpecialty: </label>
+        <input type="text" id="mainspecialty-update" name="mainspecialty-update"><br><br>
+        Region:<br>
+        <label for="region-update">NCR </label>
+        <input type="radio" id="region-update" name="region-update" value="National Capital Region (NCR)"><br>
+        <label for="calabarzon">CALABARZON (IV-A)</label>
+        <input type="radio" id="region-update" name="region-update" value="CALABARZON (IV-A)"><br>
+        <label for="ilocosregion">Ilocos Region (I) </label>
+        <input type="radio" id="region-update" name="region-update" value="Ilocos Region (I)"><br>
+        <label for="bicolregion">Bicol Region (V) </label>
+        <input type="radio" id="region-update" name="region-update" value="Bicol Region (V)"><br>
+        <label for="centralluzon">Central Luzon (III) </label>
+        <input type="radio" id="region-update" name="region-update" value="Central Luzon (III)"><br>
+        <label for="centralvisayas">Central Visayas (VII) </label>
+        <input type="radio" id="region-update" name="region-update" value="Central Visayas (VII)"><br>
+        <label for="easternvisayas">Eastern Visayas (VIII) </label>
+        <input type="radio" id="region-update" name="region-update" value="Eastern Visayas (VIII)"><br>
+        <label for="westernvisayas">Western Visayas (VI) </label>
+        <input type="radio" id="region-update" name="region-update" value="Western Visayas (VI)"><br>
+        <label for="soccsksargen">SOCCSKSARGEN (Cotabato Region) (XII) </label>
+        <input type="radio" id="region-update" name="region-update" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
+        <label for="northernmindanao">Northern Mindanao (X) </label>
+        <input type="radio" id="region-update" name="region-update" value="Northern Mindanao (X)"><br><br>
+        Status:<br>
+        <label for="queued">Queued </label>
+        <input type="radio" id="queued" name="status-update" value="Queued"><br>
+        <label for="complete">Complete </label>
+        <input type="radio" id="complete" name="status-update" value="Complete"><br><br>
+        <label for="timequeued-update">Time Queued: </label>
+        <input type="datetime-local" id="timequeued-update" name="timequeued-update"><br><br>
+        <label for="queuedate-update">Queue Date: </label>
+        <input type="datetime-local" id="queuedate-update" name="queuedate-update"><br><br>
+        <label for="startime-update">Start Time: </label>
+        <input type="datetime-local" id="startime-update" name="startime-update"><br><br>
+        <label for="endtime-update">End Time: </label>
+        <input type="datetime-local" id="endtime-update" name="endtime-update"><br><br>
+        <label for="type-update">Type: </label>
+        <input type="text" id="type-update" name="type-update"><br><br><br>
+        Virtual:<br>
+        <label for="true">True </label>
+        <input type="radio" id="true" name="virtual-update" value="True"><br>
+        <label for="false">False </label>
+        <input type="radio" id="false" name="virtual-update" value="False"><br><br>
+        
+        <input type="submit" value="Submit Appointment">
+        
+    </form>
+    <div id="update-results"></div>
+</div>
+
 <button id="search">SEARCH</button><br><br>
-<button id="insert">REPORT</button><br><br>
+<button id="insert">REPORT</button><br><br><br><br>
+
+<h1>Table Data</h1>
 
 
 <script src="static/js/interface.js"></script>
