@@ -1,0 +1,52 @@
+<button id="insert">INSERT</button><br><br>
+
+<div id="insert-content" style="display: none;">
+    <form id="insert-content-form">
+        <label for="apptid-insert">Apptid: </label>
+        <input type="text" id="apptid-insert" name="apptid-insert" required><br><br>
+        <label for="hospital-insert">Hospital: </label>
+        <input type="text" id="hospital-insert" name="hospital-insert" required><br><br>
+        <label for="doctor-insert">Doctor: </label>
+        <input type="text" id="doctor-insert" name="doctor-insert" required><br><br>
+        Location:<br>
+        <label for="luzon">Luzon </label>
+        <input type="radio" id="luzon" name="location-insert" value="Luzon"><br>
+        <label for="visayas">Visayas </label>
+        <input type="radio" id="visayas" name="location-insert" value="Visayas"><br>
+        <label for="mindanao">Mindanao </label>
+        <input type="radio" id="mindanao" name="location-insert" value="Mindanao"><br>
+        <label for="patientname-insert">Patient Name: </label>
+        <input type="text" id="patientname-insert" name="patientname-insert" required><br><br>
+        Status:<br>
+        <label for="queued">Queued </label>
+        <input type="radio" id="queued" name="status-insert" value="Queued"><br>
+        <label for="complete">Complete </label>
+        <input type="radio" id="complete" name="status-insert" value="Complete"><br><br>
+        <label for="timequeued-insert">Time Queued: </label>
+        <input type="datetime-local" id="timequeued-insert" name="timequeued-insert" required><br><br>
+        <label for="queuedate-insert">Queue Date: </label>
+        <input type="datetime-local" id="queuedate-insert" name="queuedate-insert" required><br><br>
+        <label for="startime-insert">Start Time: </label>
+        <input type="datetime-local" id="startime-insert" name="startime-insert" required><br><br>
+        <label for="endtime-insert">End Time: </label>
+        <input type="datetime-local" id="endtime-insert" name="endtime-insert" required><br><br>
+        <label for="type-insert">Type: </label>
+        <input type="text" id="type-insert" name="type-insert" required><br><br><br>
+        Virtual:<br>
+        <label for="true">True </label>
+        <input type="radio" id="true" name="virtual-insert" value="True"><br>
+        <label for="false">False </label>
+        <input type="radio" id="false" name="virtual-insert" value="False"><br><br>
+        
+        <input type="submit" value="Submit Appointment">
+        
+    </form>
+    <div id="insert-results"></div>
+</div>
+
+<button id="update">UPDATE</button><br><br>
+<button id="search">SEARCH</button><br><br>
+<button id="insert">REPORT</button><br><br>
+
+
+<script src="static/js/interface.js"></script>

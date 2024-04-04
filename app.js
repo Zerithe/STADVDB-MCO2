@@ -4,7 +4,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import hbs from 'express-hbs';
-import mainRoute from './src/routes/mainRoute.js';
+import mainRoute from './routes/mainRoute.js'
 
 //comment out which node you dont need
 import { localConnection } from './DBConn.js';
@@ -43,6 +43,7 @@ async function initializeDB(){
     }
     
     //comment out the connection to which node you dont need
+    testConnection(localConnection, 'Local Node');
     // testConnection(centralNodeConnection, 'Central Node');
     // testConnection(luzonNodeConnection, 'Luzon Node');
     // testConnection(visMinNodeConnection, 'VisMin Node');

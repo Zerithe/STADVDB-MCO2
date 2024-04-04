@@ -5,8 +5,8 @@ const router = Router();
 
 //shows main page
 router.get('/', (req, res) => {
-    res.render('test', {
-        title: 'test'
+    res.render('interface', {
+        title: 'Main Interface'
     });
 });
 

@@ -4,7 +4,7 @@ appointments = pd.read_csv('appointments_clean.csv')
 
 appointments.pop('pxid')    
 appointments.pop('clinicid')    
-appointments.pop('doctorid')    
+appointments.pop('doctorid')   
 
 print(appointments)
 
