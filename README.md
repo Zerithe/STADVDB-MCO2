@@ -10,11 +10,6 @@ Create a local database for testing by running this on MySQL:
 
 ```
 CREATE DATABASE all_appointments;
-
-USE all_appointments;
-
-CREATE TABLE appointments(pxid VARCHAR(255), clinicid VARCHAR(255), doctorid VARCHAR(255), apptid VARCHAR(255),  `status` VARCHAR(255), TimeQueued DATETIME(6), QueueDate DATETIME, StartTime DATETIME, EndTime DATETIME, type VARCHAR(255), `Virtual` TINYINT, Hospital VARCHAR(255), mainspecialty VARCHAR(255), hospitalname VARCHAR(255), RegionName VARCHAR(255), Location VARCHAR(255));
-
 ```
 
 ## NODE CONNECTION HANDLING
@@ -32,4 +27,4 @@ uncomment Luzon Node and central node.
 
 uncomment VisMin Node and centtral node.
 
-Since we're running it locally for development, use the local connection
+### Since we're running it locally for development, use the local connection

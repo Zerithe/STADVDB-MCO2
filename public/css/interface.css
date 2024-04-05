@@ -1,8 +1,9 @@
 body, button{
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     overflow: visible;
 }
 
-th, td {
-    border: 5px solid;
+table, th, td {
+    border: 1px solid;
+    padding: 5px
 }

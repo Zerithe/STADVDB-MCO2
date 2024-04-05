@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Zerithe/STADVDB-MCO2#readme",
   "dependencies": {
+    "csv": "^6.3.8",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.1",

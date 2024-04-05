@@ -133,6 +133,9 @@ updateForm.addEventListener('submit', async function(event) {
 });
 
 
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var timeout = null;
     document.querySelector('#apptid-update-search').addEventListener('keyup', function () {
