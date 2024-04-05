@@ -24,7 +24,7 @@ async function fillForm() {
         
     
         // Selecting radio buttons
-        await driver.findElement(By.css('input[type=radio][value="National Capital Region (NCR)"]')).click();
+        await driver.findElement(By.css('input[type=radio][value="Bicol Region (V)"]')).click();
         await driver.findElement(By.css('input[type=radio][value="Queued"]')).click();
         // ...continue with other radio buttons as needed
     

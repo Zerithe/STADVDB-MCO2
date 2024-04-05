@@ -1,0 +1,8 @@
+body, button{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    overflow: visible;
+}
+
+th, td {
+    border: 5px solid;
+}

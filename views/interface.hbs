@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="static/css/interface.css">
+
 <button id="insert">INSERT</button><br><br>
 
 <div id="insert-content" style="display: none; ">
@@ -15,31 +17,31 @@
         <label for="mainspecialty-insert">mainSpecialty: </label>
         <input type="text" id="mainspecialty-insert" name="mainspecialty-insert" required><br><br>
         Region:<br>
-        <label for="region-insert">NCR </label>
-        <input type="radio" id="region-insert" name="region-insert" value="National Capital Region (NCR)" required><br>
-        <label for="region-insert">CALABARZON (IV-A)</label>
-        <input type="radio" id="region-insert" name="region-insert" value="CALABARZON (IV-A)"><br>
-        <label for="region-insert">Ilocos Region (I) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Ilocos Region (I)"><br>
-        <label for="region-insert">Bicol Region (V) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Bicol Region (V)"><br>
-        <label for="region-insert">Central Luzon (III) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Central Luzon (III)"><br>
-        <label for="region-insert">Central Visayas (VII) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Central Visayas (VII)"><br>
-        <label for="region-insert">Eastern Visayas (VIII) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Eastern Visayas (VIII)"><br>
-        <label for="region-insert">Western Visayas (VI) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Western Visayas (VI)"><br>
-        <label for="region-insert">SOCCSKSARGEN (Cotabato Region) (XII) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
-        <label for="region-insert">Northern Mindanao (X) </label>
-        <input type="radio" id="region-insert" name="region-insert" value="Northern Mindanao (X)"><br><br>
+        <label for="region-ncr-insert">NCR </label>
+        <input type="radio" id="region-ncr-insert" name="region-insert" value="National Capital Region (NCR)" required><br>
+        <label for="region-calabarzon-insert">CALABARZON (IV-A)</label>
+        <input type="radio" id="region-calabarzon-insert" name="region-insert" value="CALABARZON (IV-A)"><br>
+        <label for="region-ilocos-insert">Ilocos Region (I) </label>
+        <input type="radio" id="region-ilocos-insert" name="region-insert" value="Ilocos Region (I)"><br>
+        <label for="region-bicol-insert">Bicol Region (V) </label>
+        <input type="radio" id="region-bicol-insert" name="region-insert" value="Bicol Region (V)"><br>
+        <label for="region-centralluzon-insert">Central Luzon (III) </label>
+        <input type="radio" id="region-centralluzon-insert" name="region-insert" value="Central Luzon (III)"><br>
+        <label for="region-centralvisayas-insert">Central Visayas (VII) </label>
+        <input type="radio" id="region-centralvisayas-insert" name="region-insert" value="Central Visayas (VII)"><br>
+        <label for="region-easternvisayas-insert">Eastern Visayas (VIII) </label>
+        <input type="radio" id="region-easternvisayas-insert" name="region-insert" value="Eastern Visayas (VIII)"><br>
+        <label for="region-westernvisayas-insert">Western Visayas (VI) </label>
+        <input type="radio" id="region-westernvisayas-insert" name="region-insert" value="Western Visayas (VI)"><br>
+        <label for="region-soccsksargen-insert">SOCCSKSARGEN (Cotabato Region) (XII) </label>
+        <input type="radio" id="region-soccsksargen-insert" name="region-insert" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
+        <label for="region-northernmindanao-insert">Northern Mindanao (X) </label>
+        <input type="radio" id="region-northernmindanao-insert" name="region-insert" value="Northern Mindanao (X)"><br><br>
         Status:<br>
-        <label for="status-insert">Queued </label>
-        <input type="radio" id="status-insert" name="status-insert" value="Queued" required><br>
-        <label for="complete">Complete </label>
-        <input type="radio" id="status-insert" name="status-insert" value="Complete"><br><br>
+        <label for="status-queued-insert">Queued </label>
+        <input type="radio" id="status-queued-insert" name="status-insert" value="Queued" required><br>
+        <label for="status-complete-insert">Complete </label>
+        <input type="radio" id="status-complete-insert" name="status-insert" value="Complete"><br><br>
         <label for="timequeued-insert">Time Queued: </label>
         <input type="datetime-local" id="timequeued-insert" name="timequeued-insert" required><br><br>
         <label for="queuedate-insert">Queue Date: </label>
@@ -51,10 +53,10 @@
         <label for="type-insert">Type: </label>
         <input type="text" id="type-insert" name="type-insert" required><br><br><br>
         Virtual:<br>
-        <label for="virtual-insert">True </label>
-        <input type="radio" id="virtual-insert" name="virtual-insert" value="1" required><br>
-        <label for="virtual-insert">False </label>
-        <input type="radio" id="virtual-insert" name="virtual-insert" value="0"><br><br>
+        <label for="virtual-true-insert">True </label>
+        <input type="radio" id="virtual-true-insert" name="virtual-insert" value="1" required><br>
+        <label for="virtual-false-insert">False </label>
+        <input type="radio" id="virtual-false-insert" name="virtual-insert" value="0"><br><br>
         <input type="submit" id="submit-insert" value="Submit Appointment">
         
     </form>
@@ -80,31 +82,31 @@
         <label for="mainspecialty-update">mainSpecialty: </label>
         <input type="text" id="mainspecialty-update" name="mainspecialty-update"><br><br>
         Region:<br>
-        <label for="region-update">NCR </label>
-        <input type="radio" id="region-update" name="region-update" value="National Capital Region (NCR)"><br>
-        <label for="calabarzon">CALABARZON (IV-A)</label>
-        <input type="radio" id="region-update" name="region-update" value="CALABARZON (IV-A)"><br>
-        <label for="ilocosregion">Ilocos Region (I) </label>
-        <input type="radio" id="region-update" name="region-update" value="Ilocos Region (I)"><br>
-        <label for="bicolregion">Bicol Region (V) </label>
-        <input type="radio" id="region-update" name="region-update" value="Bicol Region (V)"><br>
-        <label for="centralluzon">Central Luzon (III) </label>
-        <input type="radio" id="region-update" name="region-update" value="Central Luzon (III)"><br>
-        <label for="centralvisayas">Central Visayas (VII) </label>
-        <input type="radio" id="region-update" name="region-update" value="Central Visayas (VII)"><br>
-        <label for="easternvisayas">Eastern Visayas (VIII) </label>
-        <input type="radio" id="region-update" name="region-update" value="Eastern Visayas (VIII)"><br>
-        <label for="westernvisayas">Western Visayas (VI) </label>
-        <input type="radio" id="region-update" name="region-update" value="Western Visayas (VI)"><br>
-        <label for="soccsksargen">SOCCSKSARGEN (Cotabato Region) (XII) </label>
-        <input type="radio" id="region-update" name="region-update" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
-        <label for="northernmindanao">Northern Mindanao (X) </label>
-        <input type="radio" id="region-update" name="region-update" value="Northern Mindanao (X)"><br><br>
+        <label for="region-ncr-update">NCR </label>
+        <input type="radio" id="region-ncr-update" name="region-update" value="National Capital Region (NCR)" required><br>
+        <label for="region-calabarzon-update">CALABARZON (IV-A)</label>
+        <input type="radio" id="region-calabarzon-update" name="region-update" value="CALABARZON (IV-A)"><br>
+        <label for="region-ilocos-update">Ilocos Region (I) </label>
+        <input type="radio" id="region-ilocos-update" name="region-update" value="Ilocos Region (I)"><br>
+        <label for="region-bicol-update">Bicol Region (V) </label>
+        <input type="radio" id="region-bicol-update" name="region-update" value="Bicol Region (V)"><br>
+        <label for="region-centralluzon-update">Central Luzon (III) </label>
+        <input type="radio" id="region-centralluzon-update" name="region-update" value="Central Luzon (III)"><br>
+        <label for="region-centralvisayas-update">Central Visayas (VII) </label>
+        <input type="radio" id="region-centralvisayas-update" name="region-update" value="Central Visayas (VII)"><br>
+        <label for="region-easternvisayas-update">Eastern Visayas (VIII) </label>
+        <input type="radio" id="region-easternvisayas-update" name="region-update" value="Eastern Visayas (VIII)"><br>
+        <label for="region-westernvisayas-update">Western Visayas (VI) </label>
+        <input type="radio" id="region-westernvisayas-update" name="region-update" value="Western Visayas (VI)"><br>
+        <label for="region-soccsksargen-update">SOCCSKSARGEN (Cotabato Region) (XII) </label>
+        <input type="radio" id="region-soccsksargen-update" name="region-update" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
+        <label for="region-northernmindanao-update">Northern Mindanao (X) </label>
+        <input type="radio" id="region-northernmindanao-update" name="region-update" value="Northern Mindanao (X)"><br><br>
         Status:<br>
-        <label for="queued">Queued </label>
-        <input type="radio" id="queued" name="status-update" value="Queued"><br>
-        <label for="complete">Complete </label>
-        <input type="radio" id="complete" name="status-update" value="Complete"><br><br>
+        <label for="status-queued-update">Queued </label>
+        <input type="radio" id="status-queued-update" name="status-update" value="Queued"><br>
+        <label for="status-complete-update">Complete </label>
+        <input type="radio" id="status-complete-update" name="status-update" value="Complete"><br><br>
         <label for="timequeued-update">Time Queued: </label>
         <input type="datetime-local" id="timequeued-update" name="timequeued-update"><br><br>
         <label for="queuedate-update">Queue Date: </label>
@@ -116,10 +118,10 @@
         <label for="type-update">Type: </label>
         <input type="text" id="type-update" name="type-update"><br><br><br>
         Virtual:<br>
-        <label for="true">True </label>
-        <input type="radio" id="true" name="virtual-update" value="True"><br>
-        <label for="false">False </label>
-        <input type="radio" id="false" name="virtual-update" value="False"><br><br>
+        <label for="virtual-true-update">True </label>
+        <input type="radio" id="virtual-true-update" name="virtual-update" value="1"><br>
+        <label for="virtual-false-update">False </label>
+        <input type="radio" id="virtual-false-update" name="virtual-update" value="0"><br><br>
         
         <input type="submit" value="Submit Appointment">
         
@@ -130,7 +132,28 @@
 <button id="search">SEARCH</button><br><br>
 <button id="insert">REPORT</button><br><br><br><br>
 
-<h1>Table Data</h1>
+<h1>Table Data (WIP)</h1>
+<table id="table-data">
+    <thead>
+        <tr>
+            <th>Apptid</th>
+            <th>Pxid</th>
+            <th>Clinicid</th>
+            <th>Doctorid</th>
+            <th>Hospital Name</th>
+            <th>Main Speciality of Doctor</th>
+            <th>Region Name</th>
+            <th>Status</th>
+            <th>Time Queued</th>
+            <th>Queue Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>type</th>
+            <th>Virtual</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+</table>
 
 
 <script src="static/js/interface.js"></script>
