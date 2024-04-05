@@ -133,7 +133,10 @@ updateForm.addEventListener('submit', async function(event) {
 });
 
 
-
+const importCsvBtn = document.querySelector('#import-csv')
+importCsvBtn.addEventListener('click', () => {
+    
+})
 
 
 document.addEventListener('DOMContentLoaded', function() {
