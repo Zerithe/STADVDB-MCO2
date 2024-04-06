@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import csv
 
 appointments = pd.read_csv('appointments_mco2.csv')
 
@@ -20,4 +21,35 @@ print(appointments)
 print(appointments.RegionName.unique())
 print(appointments.Location.unique())
 
-#appointments.to_csv('appointments_mco2.csv', index=False)
+indeces = appointments.index[appointments['Location'] == 'Luzon'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Luzon'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Luzon'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Luzon'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Visayas'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Visayas'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+
+indeces = appointments.index[appointments['Location'] == 'Mindanao'].tolist()
+indeces_to_delete = indeces[1::2]
+appointments = appointments.drop(indeces_to_delete)
+print(appointments)
+print(appointments['Location'].value_counts())
+
+
+appointments.to_csv('appointments_mco2.csv', index=False, quoting=csv.QUOTE_ALL, quotechar='"')

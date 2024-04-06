@@ -131,9 +131,16 @@
 
 <button id="search">SEARCH</button><br><br>
 <button id="report">REPORT</button><br><br>
-<button id="import-csv">IMPORT APPOINTMENTS CSV</button><br><br><br><br><br><br>
+<button id="import-csv">IMPORT APPOINTMENTS CSV TO CENTRAL NODE</button><br><br><br>
+<!--MAKE MORE IMPORTS FOR EACH NODE-->
+<div id="loading-csv"></div><br><br><br><br><br><br>
 
 <h1>Table Data (WIP)</h1>
+<a id="show-10" href="/10">SHOW 10 </a>
+<a id="show-25" href="/25">SHOW 25 </a>
+<a id="show-50" href="/50">SHOW 50 </a>
+<a id="show-100" href="/100">SHOW 100 </a>
+<a id="show-all" href="/all">SHOW ALL </a><br><br>
 <table id="table-data">
     <thead>
         <tr>
@@ -154,6 +161,31 @@
             <th>Location</th>
         </tr>
     </thead>
+    <tbody>
+        {{#if appointments}}
+            {{#each appointments}}
+            <tr>
+                <th>{{apptid}}</th>
+                <th>{{pxid}}</th>
+                <th>{{clinicid}}</th>
+                <th>{{doctorid}}</th>
+                <th>{{hosipitalname}}</th>
+                <th>{{mainspecialty}}</th>
+                <th>{{RegionName}}</th>
+                <th>{{status}}</th>
+                <th>{{TimeQueued}}</th>
+                <th>{{QueueDate}}</th>
+                <th>{{StartTime}}</th>
+                <th>{{EndTime}}</th>
+                <th>{{type}}</th>
+                <th>{{Virtual}}</th>
+                <th>{{Location}}</th>
+            </tr>
+            {{/each}}
+        {{else}}
+            <div><h2>No appointments found</h2></div>
+        {{/if}}
+    </tbody>
 </table>
 
 

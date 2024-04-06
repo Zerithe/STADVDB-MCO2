@@ -6,10 +6,20 @@ export const localConnection = new Sequelize('all_appointments', 'root', 'root',
     host: 'localhost',
     port: '3306',
     dialect: 'mysql',
-    logging: console.log()
+    logging: console.log(),
 });
 
+async function setTimeoutTimes() {
+    try {
+    const res1 = await localConnection.query('SET SESSION wait_timeout=300');
+    const res2 = await localConnection.query('SET SESSION interactive_timeout=300');
+    console.log(res1, ' ', res2);
+    } catch(err){
+        console.log('error changing timeout');
+    }
+}
 
+setTimeoutTimes();
 //add or remove comments for which node you want to connect to
 /*
 //connects to central node

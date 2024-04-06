@@ -133,10 +133,23 @@ updateForm.addEventListener('submit', async function(event) {
 });
 
 
-const importCsvBtn = document.querySelector('#import-csv')
-importCsvBtn.addEventListener('click', () => {
-    
-})
+const importCsvBtn = document.querySelector('#import-csv');
+
+
+
+importCsvBtn.addEventListener('click', async () => {
+    try {
+        const loadingContent = document.querySelector('#loading-csv');
+        loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
+        const response = await fetch('/importcsv');
+        location.reload();
+    } catch(err){
+        console.log(err);
+    }
+});
+
+
+
 
 
 document.addEventListener('DOMContentLoaded', function() {

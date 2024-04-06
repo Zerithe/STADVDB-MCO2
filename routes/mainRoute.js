@@ -1,14 +1,37 @@
 import { Appointments } from '../DBConn.js';
 import {Router} from 'express';
 import { localConnection } from '../DBConn.js';
+import csvParser from 'csv-parser';
+import fs from 'fs';
 
 
 const router = Router();
 
 //shows main page
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
+    const getAppointments = await Appointments.findAll({limit: 10, raw:true});
     res.render('interface', {
-        title: 'Main Interface'
+        title: 'Main Interface',
+        appointments: getAppointments
+    });
+});
+
+router.get('/:displaytablerows', async (req, res) => {
+    const tablerows = req.params.displaytablerows;
+    var getAppointments = null;
+    const t = await localConnection.transaction();
+
+    if(tablerows === 'all'){
+        getAppointments = await Appointments.findAll({raw:true});
+    } else {
+        const tablerowsInt = parseInt(tablerows);
+        console.log(tablerowsInt);
+        getAppointments = await Appointments.findAll({limit: tablerowsInt, raw:true});
+    }
+    await t.commit();
+    res.render('interface', {
+        title: 'Main Interface',
+        appointments: getAppointments
     });
 });
 
@@ -165,4 +188,72 @@ router.post('/updatedata', async(req, res) => {
     }
 });
 
+router.get('/importcsv', async (req, res) => {
+    console.log('CSV IMPORT CALLED');
+    const csvFilePath = 'public/others/appointments_mco2.csv';
+    
+    try {
+        console.log('finding file path');
+        await fs.promises.access(csvFilePath);
+
+        const results = [];
+
+        const csvStream = fs.createReadStream(csvFilePath).pipe(csvParser());
+
+        console.log('putting files into an array');
+        var count = 0;
+        for await (const record of csvStream) {
+            if(count % 1000 == 0){
+                console.log(count);
+            }
+            count = count + 1;
+
+            for (const key in record) {
+                if (record[key] === '') {
+                    record[key] = null;
+                }
+            }
+            try{
+                await Appointments.create(record);
+            } catch(err) {
+                console.error('Error inserting records', err);
+                console.log(record);
+                return;
+            }
+        }
+
+        //const bulkAppointments = await Appointments.bulkCreate(results, {raw: true});
+        res.sendStatus(200);
+
+    } catch(err) {
+        console.log('Error importing CSV: ', err);
+        res.sendStatus(500);
+    }
+    
+    
+});
+
 export default router;
+
+
+/*
+for await (const record of csvStream) {
+            if(count % 10000 == 0){
+                console.log(count);
+            }
+            count = count + 1;
+
+            for (const key in record) {
+                if (record[key] === '') {
+                    record[key] = null;
+                }
+            }
+            try{
+                await Appointments.create(record);
+            } catch(err) {
+                console.error('Error inserting records', err);
+                console.log(record);
+                return;
+            }
+        }
+*/ 
