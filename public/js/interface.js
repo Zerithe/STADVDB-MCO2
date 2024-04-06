@@ -1,5 +1,6 @@
 const insertBtn = document.querySelector('#insert');
 const updateBtn = document.querySelector('#update');
+const searchBtn = document.querySelector('#search');
 
 insertBtn.addEventListener('click', (e) => {
     var insertContent = document.querySelector('#insert-content');
@@ -9,6 +10,11 @@ insertBtn.addEventListener('click', (e) => {
 updateBtn.addEventListener('click', (e) => {
     var updateContent = document.querySelector('#update-content');
     updateContent.style.display = updateContent.style.display === 'none' ? 'block' : 'none';
+});
+
+searchBtn.addEventListener('click', (E) => {
+    var searchContent = document.querySelector('#search-content');
+    searchContent.style.display = searchContent.style.display === 'none' ? 'block' : 'none';
 });
 
 
@@ -134,9 +140,6 @@ updateForm.addEventListener('submit', async function(event) {
 
 
 const importCsvBtn = document.querySelector('#import-csv');
-
-
-
 importCsvBtn.addEventListener('click', async () => {
     try {
         const loadingContent = document.querySelector('#loading-csv');
