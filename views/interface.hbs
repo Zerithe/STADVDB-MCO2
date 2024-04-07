@@ -131,38 +131,34 @@
 
 <button id="search">SEARCH</button><br><br>
 <div id="search-content" style="display: none;">
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
-    <input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
-    <label for="apptid-search-check">Apptid</label><br>
+    <!--<input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
+    <label for="apptid-search-check">Apptid</label><br>-->
+    <form id="search-content-apptid-form" action="/searchdata" method="POST">
+        <input type="textbox" id="dataType" name="dataType" value="apptid" hidden>
+        <label for="apptidQuery">Search Apptid: </label>
+        <input type="textbox" id="apptidQuery" name="apptidQuery"><br><br>
+        <input type="submit" value="Search Apptid">
+    </form><br><br><br>
+    <form id="search-content-pxid-form">
+        <label for="search-pxid">Search Pxid: </label>
+        <input type="textbox" id="search-pxid" name="search-pxid"><br><br>
+        <input type="submit" value="Search pxid">
+    </form><br><br><br>
+    <form id="search-content-clinicid-form">
+        <label for="search-clinicid">Search Clinicid: </label>
+        <input type="textbox" id="search-clinicid" name="search-clinicid"><br><br>
+        <input type="submit" value="Search clinicid">
+    </form><br><br><br>
+    <form id="search-content-doctorid-form">
+        <label for="search-doctorid">Search Doctorid: </label>
+        <input type="textbox" id="search-doctorid" name="search-doctorid"><br><br>
+        <input type="submit" value="Search Doctorid">
+    </form><br><br><br>
+    <form id="search-content-mainspecialty-form">
+        <label for="search-mainspecialty">Search Main Specialty: </label>
+        <input type="textbox" id="search-mainspecialty" name="search-mainspecialty"><br><br>
+        <input type="submit" value="Search mainspecialty">
+    </form><br><br><br>
 </div>
 
 <button id="report">REPORT</button><br><br>
@@ -204,7 +200,7 @@
                 <th>{{pxid}}</th>
                 <th>{{clinicid}}</th>
                 <th>{{doctorid}}</th>
-                <th>{{hosipitalname}}</th>
+                <th>{{hospitalname}}</th>
                 <th>{{mainspecialty}}</th>
                 <th>{{RegionName}}</th>
                 <th>{{status}}</th>

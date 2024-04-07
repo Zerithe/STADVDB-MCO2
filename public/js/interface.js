@@ -89,20 +89,20 @@ updateForm.addEventListener('submit', async function(event) {
 
     var location;
     const apptidSearch = document.querySelector('#apptid-update-search').value;
-    const apptid = document.querySelector('#apptid-insert').value;
-    const pxid = document.querySelector('#pxid-insert').value;
-    const clinicid = document.querySelector('#clinicid-insert').value;
-    const doctorid = document.querySelector('#doctorid-insert').value;
-    const hospital = document.querySelector('#hospital-insert').value;
-    const mainspecialty = document.querySelector('#mainspecialty-insert').value;
-    const region = document.querySelector('#region-insert').value;
-    const status = document.querySelector('#status-insert').value;
-    const timequeued = document.querySelector('#timequeued-insert').value;
-    const queuedate = document.querySelector('#queuedate-insert').value;
-    const startime = document.querySelector('#startime-insert').value;
-    const endtime = document.querySelector('#endtime-insert').value;
-    const type = document.querySelector('#type-insert').value;
-    const virtual = document.querySelector('#virtual-insert').value;
+    const apptid = document.querySelector('#apptid-update').value;
+    const pxid = document.querySelector('#pxid-update').value;
+    const clinicid = document.querySelector('#clinicid-update').value;
+    const doctorid = document.querySelector('#doctorid-update').value;
+    const hospital = document.querySelector('#hospital-update').value;
+    const mainspecialty = document.querySelector('#mainspecialty-update').value;
+    const region = document.querySelector('input[name="region-update"]:checked').value;
+    const status = document.querySelector('input[name="status-update"]:checked').value;
+    const timequeued = document.querySelector('#timequeued-update').value;
+    const queuedate = document.querySelector('#queuedate-update').value;
+    const startime = document.querySelector('#startime-update').value;
+    const endtime = document.querySelector('#endtime-update').value;
+    const type = document.querySelector('#type-update').value;
+    const virtual = document.querySelector('input[name="virtual-update"]:checked').value;
     if(region === 'National Capital Region (NCR)' || region === 'CALABARZON (IV-A)' || region === 'Ilocos Region (I)' || region === 'Bicol Region (V)' || region === 'Central Luzon (III)'){
         location = 'Luzon';
     } else if(region === 'Central Visayas (VII)' || region === 'Eastern Visayas (VIII)' || region === 'Western Visayas (VI)'){
@@ -131,7 +131,18 @@ updateForm.addEventListener('submit', async function(event) {
     });
 
     try {
-        
+        const response = await fetch('/updatedata', {
+            method: 'POST',
+            body: jstring,
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+        if(response.status == 200){
+            const result = document.querySelector('#update-results');
+            alert('Succesfully Inserted Appointment');
+            location.reload;
+        }
     } catch(err) {
         console.log('Error Updating Appointment', err.message);
         alert('Error Updating Appointment');
@@ -139,12 +150,30 @@ updateForm.addEventListener('submit', async function(event) {
 });
 
 
+// const apptidSearch = document.querySelector('#search-content-apptid-form');
+// apptidSearch.addEventListener('submit', (event) => {
+
+//     const apptidQuery = document.querySelector('#search-apptid').value;  
+//     const dataType = 'apptid';  
+//     const jstring = JSON.stringify({apptidQuery, dataType});
+//     const response = fetch('/searchdata', {
+//         method: 'POST',
+//         body: jstring,
+//         headers: {
+//             'content-type': 'application/json'
+//         }
+//     });
+// });
+
+
 const importCsvBtn = document.querySelector('#import-csv');
 importCsvBtn.addEventListener('click', async () => {
     try {
         const loadingContent = document.querySelector('#loading-csv');
         loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
-        const response = await fetch('/importcsv');
+        const response = await fetch('/importcsv', {
+            method: 'GET'
+        });
         location.reload();
     } catch(err){
         console.log(err);

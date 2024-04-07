@@ -16,25 +16,6 @@ router.get('/', async (req, res) => {
     });
 });
 
-router.get('/:displaytablerows', async (req, res) => {
-    const tablerows = req.params.displaytablerows;
-    var getAppointments = null;
-    const t = await localConnection.transaction();
-
-    if(tablerows === 'all'){
-        getAppointments = await Appointments.findAll({raw:true});
-    } else {
-        const tablerowsInt = parseInt(tablerows);
-        console.log(tablerowsInt);
-        getAppointments = await Appointments.findAll({limit: tablerowsInt, raw:true});
-    }
-    await t.commit();
-    res.render('interface', {
-        title: 'Main Interface',
-        appointments: getAppointments
-    });
-});
-
 
 //updates the update form whenever one types the apptid they want to update
 router.post('/getformdata', async(req, res) =>{
@@ -64,10 +45,18 @@ router.post('/getformdata', async(req, res) =>{
                 Virtual: appointment.Virtual,
                 Location: appointment.Location
             }
-            formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
-            formattedAppointment.QueueDate = formattedAppointment.QueueDate.toISOString().slice(0, 16);
-            formattedAppointment.StartTime = formattedAppointment.StartTime.toISOString().slice(0, 16);
-            formattedAppointment.EndTime = formattedAppointment.EndTime.toISOString().slice(0, 16);
+            if(formattedAppointment.TimeQueued){
+                formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
+            }
+            if(formattedAppointment.QueueDate){
+                formattedAppointment.QueueDate = formattedAppointment.QueueDate.toISOString().slice(0, 16);
+            }
+            if(formattedAppointment.StartTime){
+                formattedAppointment.StartTime = formattedAppointment.StartTime.toISOString().slice(0, 16);
+            }
+            if(formattedAppointment.EndTime){
+                formattedAppointment.EndTime = formattedAppointment.EndTime.toISOString().slice(0, 16);
+            }
 
             //transaction commit
             await t.commit()
@@ -136,6 +125,10 @@ router.post('/insertdata', async(req, res) => {
 router.post('/updatedata', async(req, res) => {
     console.log('update called');
     console.log(req.body);
+
+    Object.keys(req.body).forEach(key => {
+        req.body[key] = req.body[key] === '' ? null : req.body[key];
+    });
     const {
         apptidSearch,
         apptid,
@@ -188,6 +181,28 @@ router.post('/updatedata', async(req, res) => {
     }
 });
 
+router.post('/searchdata', async (req, res) =>{
+    console.log('search called');
+    console.log(req.body);
+    if(req.body.dataType === 'apptid'){
+        console.log('apptid search');
+        const apptid = req.body.apptidQuery;
+        const t = await localConnection.transaction();
+        try{
+            const searchAppointment = await Appointments.findAll({where: {apptid: apptid}, raw: true});
+            await t.commit();
+            console.log('search appointment complete', searchAppointment);
+            res.render('interface', {
+                title: 'Main Interface',
+                appointments: searchAppointment
+            });
+        } catch(err) {
+            await t.rollback();
+            console.log('Error searching Apptid', err);
+        }
+    }
+});
+
 router.get('/importcsv', async (req, res) => {
     console.log('CSV IMPORT CALLED');
     const csvFilePath = 'public/others/appointments_mco2.csv';
@@ -231,6 +246,25 @@ router.get('/importcsv', async (req, res) => {
     }
     
     
+});
+
+router.get('/:displaytablerows', async (req, res) => {
+    const tablerows = req.params.displaytablerows;
+    var getAppointments = null;
+    const t = await localConnection.transaction();
+
+    if(tablerows === 'all'){
+        getAppointments = await Appointments.findAll({raw:true});
+    } else {
+        const tablerowsInt = parseInt(tablerows);
+        console.log(tablerowsInt);
+        getAppointments = await Appointments.findAll({limit: tablerowsInt, raw:true});
+    }
+    await t.commit();
+    res.render('interface', {
+        title: 'Main Interface',
+        appointments: getAppointments
+    });
 });
 
 export default router;
