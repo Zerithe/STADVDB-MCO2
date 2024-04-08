@@ -9,6 +9,14 @@ export const localConnection = new Sequelize('all_appointments', 'root', 'root',
     logging: console.log(),
 });
 
+export const centralNodeConnection = new Sequelize('all_appointments', 'root', 'root', {
+    host: 'ccscloud.dlsu.edu.ph',
+    port: 20015,
+    dialect: 'mysql',
+    logging: console.log()
+});
+
+//connects to central node
 async function setTimeoutTimes() {
     try {
     const res1 = await localConnection.query('SET SESSION wait_timeout=300');
@@ -18,21 +26,10 @@ async function setTimeoutTimes() {
     }
 }
 
-setTimeoutTimes();
-//add or remove comments for which node you want to connect to
-/*
-//connects to central node
-export const centralNodeConnection = new Sequelize('all_appointments', 'root', 'root', {
-    host: 'ccscloud.dlsu.edu.ph',
-    port: '20015',
-    dialect: 'mysql',
-    logging: console.log()
-});
-
 //connects to Luzon node
 export const luzonNodeConnection = new Sequelize('luzon_appointments', 'root', 'root', {
     host: 'ccscloud.dlsu.edu.ph',
-    port: '20016',
+    port: 20016,
     dialect: 'mysql',
     logging: console.log()
 });
@@ -43,7 +40,14 @@ export const visMinNodeConnection = new Sequelize('visayas_mindanao_appointments
     port: '20017',
     dialect: 'mysql',
     logging: console.log()
-});*/
+});
+
+setTimeoutTimes();
+//add or remove comments for which node you want to connect to
+/*
+
+
+*/
 export const Appointments = localConnection.define('appointment', {
     pxid: { type: Sequelize.STRING, allowNull: true },
     clinicid: { type: Sequelize.STRING, allowNull: true },

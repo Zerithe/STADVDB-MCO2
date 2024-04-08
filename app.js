@@ -8,9 +8,9 @@ import mainRoute from './routes/mainRoute.js'
 import { Appointments } from './DBConn.js';
 //comment out which node you dont need
 import { localConnection } from './DBConn.js';
-// import { centralNodeConnection } from './DBConn.js';
-// import { luzonNodeConnection } from './DBConn.js';
-// import { visMinNodeConnection } from './DBConn.js';
+import { centralNodeConnection } from './DBConn.js';
+import { luzonNodeConnection } from './DBConn.js';
+import { visMinNodeConnection } from './DBConn.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -44,16 +44,16 @@ async function initializeDB(){
     
     //comment out the connection to which node you dont need
     testConnection(localConnection, 'Local Node');
-    // testConnection(centralNodeConnection, 'Central Node');
-    // testConnection(luzonNodeConnection, 'Luzon Node');
-    // testConnection(visMinNodeConnection, 'VisMin Node');
+    testConnection(centralNodeConnection, 'Central Node');
+    testConnection(luzonNodeConnection, 'Luzon Node');
+    testConnection(visMinNodeConnection, 'VisMin Node');
 
 
     //comment out the connection to which node you dont need
     await localConnection.sync();
-    // await centralNodeConnection.sync();
-    // await luzonNodeConnection.sync();
-    // await visMinNodeConnection.sync();
+    await centralNodeConnection.sync();
+    await luzonNodeConnection.sync();
+    await visMinNodeConnection.sync();
 }
 
 initializeDB();
