@@ -166,6 +166,27 @@ updateForm.addEventListener('submit', async function(event) {
 // });
 
 
+//TEMPORARY FUNCTION, DELETE WHEN DEPLOYING
+const importLocalCsvBtn = document.querySelector('#import-csv-local');
+importLocalCsvBtn.addEventListener('click', async () => {
+    try {
+        const loadingContent = document.querySelector('#loading-csv');
+        loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
+        const response = await fetch('/importcsvlocal', {
+            method: 'GET'
+        });
+        if(response.ok){
+            location.reload();
+        } else {
+            alert('CSV ALREADY IMPORTED');
+            location.reload();
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
+
 const importCsvBtn = document.querySelector('#import-csv');
 importCsvBtn.addEventListener('click', async () => {
     try {
@@ -174,11 +195,56 @@ importCsvBtn.addEventListener('click', async () => {
         const response = await fetch('/importcsv', {
             method: 'GET'
         });
-        location.reload();
+        if(response.ok){
+            location.reload();
+        } else {
+            alert('CSV ALREADY IMPORTED');
+            location.reload();
+        }
     } catch(err){
         console.log(err);
     }
 });
+
+const importCsvLuzonBtn = document.querySelector('#import-csv-luzon');
+importCsvLuzonBtn.addEventListener('click', async () => {
+    try {
+        const loadingContent = document.querySelector('#loading-csv');
+        loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
+        const response = await fetch('/importcsvluzon', {
+            method: 'GET'
+        });
+        if(response.ok){
+            location.reload();
+        } else {
+            alert('CSV ALREADY IMPORTED');
+            location.reload();
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
+const importCsvVisMinBtn = document.querySelector('#import-csv-vismin');
+importCsvVisMinBtn.addEventListener('click', async () => {
+    try {
+        const loadingContent = document.querySelector('#loading-csv');
+        loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
+        const response = await fetch('/importcsvvismin', {
+            method: 'GET'
+        });
+        if(response.ok){
+            location.reload();
+        } else {
+            alert('CSV ALREADY IMPORTED');
+            location.reload();
+        }
+    } catch(err){
+        console.log(err);
+    }
+});
+
+
 
 
 

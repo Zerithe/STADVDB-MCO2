@@ -1,4 +1,4 @@
-import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments } from '../DBConn.js';
+import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments, centralNodeConnection, luzonNodeConnection } from '../DBConn.js';
 import {Router} from 'express';
 import { localConnection } from '../DBConn.js';
 import csvParser from 'csv-parser';
@@ -112,28 +112,81 @@ router.post('/insertdata', async(req, res) => {
         virtual,
         location
     } = req.body;
-
+    const central = await CentralNodeAppointments.transaction();
+    const luzon = await LuzonNodeAppointments.transaction();
+    const vismin = await VisMinNodeAppointments.transaction();
     try {
-        const insertAppointment = await Appointments.create({
-            apptid: apptid,
-            pxid: pxid,
-            clinicid: clinicid,
-            doctorid: doctorid,
-            hospitalname: hospital,
-            mainspecialty: mainspecialty,
-            RegionName: region,
-            status: status,
-            TimeQueued: timequeued,
-            QueueDate: queuedate,
-            StartTime: startime,
-            EndTime: endtime,
-            type: type,
-            Virtual: virtual,
-            Location: location
-        });
-        console.log('Successfully inserted appointment', insertAppointment);
+        const central = await CentralNodeAppointments.transaction();
+            const insertCentralAppointment = await CentralNodeAppointments.create({
+                apptid: apptid,
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            });
+        await central.commit();
+        console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
+
+
+        if(location === 'Luzon'){
+            const insertLuzonAppointment = await LuzonNodeAppointments.create({
+                apptid: apptid,
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            });
+            await luzon.commit();
+            await vismin.commit();
+            console.log('Successfully inserted appointment into central node ', insertLuzonAppointment);
+        }
+        if(location === 'Visayas' || location === 'Mindanao'){
+            const insertVisMinAppointment = await VisMinNodeAppointments.create({
+                apptid: apptid,
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            });
+            await vismin.commit();
+            await luzon.commit();
+            console.log('Successfully inserted appointment into vismin node', insertVisMinAppointment);
+        }
         res.sendStatus(200);
     } catch(err) {
+        await central.rollback();
+        await luzon.rollback();
+        await vismin.rollback();
         console.log('Error inserting appointment: ', err);
         res.sendStatus(400);
     }
@@ -167,9 +220,10 @@ router.post('/updatedata', async(req, res) => {
         location
     } = req.body;
 
-    const t = await localConnection.transaction();
+    const central = await centralNodeConnection.transaction();
+    const luzon = await luzonNodeConnection.transaction();
     try {
-        const updateAppointment = await Appointments.update({
+        const updateCentralAppointment = await CentralNodeAppointments.update({
             apptid: apptid,
             pxid: pxid,
             clinicid: clinicid,
@@ -190,11 +244,34 @@ router.post('/updatedata', async(req, res) => {
                 apptid: apptidSearch
             }
         });
-        await t.commit();
-        console.log('Successfully updated appointment', updateAppointment);
+        await central.commit();
+        console.log('Successfully updated appointment', updateCentralAppointment);
+        if(location === 'Luzon'){
+            const updateLuzonAppointment = await LuzonNodeAppointments.update({
+                apptid: apptid,
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            }, {
+                where: {
+                    apptid: apptidSearch
+                }
+            });
+        }
         res.sendStatus(200);
     } catch(err) {
-        await t.rollback();
+        await central.rollback();
         console.log('Error updating appointment: ', err);
         res.sendStatus(400);
     }
@@ -219,6 +296,45 @@ router.post('/searchdata', async (req, res) =>{
             await t.rollback();
             console.log('Error searching Apptid', err);
         }
+    }
+});
+
+
+//TEMPORARY FUNCTION DELETE WHEN DEPLOYING
+router.get('/importcsvlocal', async (req, res) => {
+    console.log('CSV IMPORT CALLED');
+    const csvFilePath = 'public/others/appointments_mco2.csv';
+    
+    try {
+        console.log('finding file path');
+        await fs.promises.access(csvFilePath);
+
+        const results = [];
+
+        const csvStream = fs.createReadStream(csvFilePath).pipe(csvParser());
+
+        console.log('putting files into an array');
+        var count = 0;
+        for await (const record of csvStream) {
+            if(count % 1000 == 0){
+                console.log(count);
+            }
+            count = count + 1;
+
+            for (const key in record) {
+                if (record[key] === '') {
+                    record[key] = null;
+                }
+            }
+            await Appointments.create(record);
+        }
+
+        //const bulkAppointments = await Appointments.bulkCreate(results, {raw: true});
+        res.sendStatus(200);
+
+    } catch(err) {
+        console.log('Error importing CSV: ', err);
+        res.sendStatus(500);
     }
 });
 
@@ -247,12 +363,46 @@ router.get('/importcsv', async (req, res) => {
                     record[key] = null;
                 }
             }
-            try{
-                await CentralNodeAppointments.create(record);
-            } catch(err) {
-                console.error('Error inserting records', err);
-                console.log(record);
-                return;
+            await CentralNodeAppointments.create(record);
+        }
+
+        //const bulkAppointments = await Appointments.bulkCreate(results, {raw: true});
+        res.sendStatus(200);
+
+    } catch(err) {
+        console.log('Error importing CSV: ', err);
+        res.sendStatus(500);
+    }
+});
+
+router.get('/importcsvluzon', async (req, res) => {
+    console.log('CSV LUZON IMPORT CALLED');
+    const csvFilePath = 'public/others/appointments_mco2.csv';
+
+    try {
+        console.log('finding file path');
+        await fs.promises.access(csvFilePath);
+
+        const results = [];
+
+        const csvStream = fs.createReadStream(csvFilePath).pipe(csvParser());
+
+        console.log('putting files into an array');
+        var count = 0;
+        for await (const record of csvStream) {
+            if(count % 1000 == 0){
+                console.log(count);
+            }
+            count = count + 1;
+
+            for (const key in record) {
+                if (record[key] === '') {
+                    record[key] = null;
+                }
+            }
+            
+            if(record.Location === 'Luzon'){
+                await LuzonNodeAppointments.create(record);
             }
         }
 
@@ -263,8 +413,46 @@ router.get('/importcsv', async (req, res) => {
         console.log('Error importing CSV: ', err);
         res.sendStatus(500);
     }
-    
-    
+});
+
+router.get('/importcsvvismin', async (req, res) => {
+    console.log('CSV LUZON IMPORT CALLED');
+    const csvFilePath = 'public/others/appointments_mco2.csv';
+
+    try {
+        console.log('finding file path');
+        await fs.promises.access(csvFilePath);
+
+        const results = [];
+
+        const csvStream = fs.createReadStream(csvFilePath).pipe(csvParser());
+
+        console.log('putting files into an array');
+        var count = 0;
+        for await (const record of csvStream) {
+            if(count % 1000 == 0){
+                console.log(count);
+            }
+            count = count + 1;
+
+            for (const key in record) {
+                if (record[key] === '') {
+                    record[key] = null;
+                }
+            }
+            
+            if(record.Location === 'Visayas' || record.Location === 'Mindanao'){
+                await VisMinNodeAppointments.create(record);
+            }
+        }
+
+        //const bulkAppointments = await Appointments.bulkCreate(results, {raw: true});
+        res.sendStatus(200);
+
+    } catch(err) {
+        console.log('Error importing CSV: ', err);
+        res.sendStatus(500);
+    }
 });
 
 
