@@ -150,20 +150,25 @@ updateForm.addEventListener('submit', async function(event) {
 });
 
 
-// const apptidSearch = document.querySelector('#search-content-apptid-form');
-// apptidSearch.addEventListener('submit', (event) => {
+const apptidSearch = document.querySelector('#search-content-form');
+apptidSearch.addEventListener('submit', (event) => {
+    event.preventDefault();
+    var searchData = {};
+    const apptidQuery = document.querySelector('#apptidQuery').value;
+    
+    if(apptidQuery){
+        const dataType = 'apptid';
+    }
 
-//     const apptidQuery = document.querySelector('#search-apptid').value;  
-//     const dataType = 'apptid';  
-//     const jstring = JSON.stringify({apptidQuery, dataType});
-//     const response = fetch('/searchdata', {
-//         method: 'POST',
-//         body: jstring,
-//         headers: {
-//             'content-type': 'application/json'
-//         }
-//     });
-// });
+    // const jstring = JSON.stringify({apptidQuery, dataType});
+    // const response = fetch('/searchdata', {
+    //     method: 'POST',
+    //     body: jstring,
+    //     headers: {
+    //         'content-type': 'application/json'
+    //     }
+    // });
+});
 
 
 //TEMPORARY FUNCTION, DELETE WHEN DEPLOYING

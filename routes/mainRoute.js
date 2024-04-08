@@ -1,4 +1,4 @@
-import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments, centralNodeConnection, luzonNodeConnection } from '../DBConn.js';
+import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments, centralNodeConnection, luzonNodeConnection, visMinNodeConnection } from '../DBConn.js';
 import {Router} from 'express';
 import { localConnection } from '../DBConn.js';
 import csvParser from 'csv-parser';
@@ -112,28 +112,27 @@ router.post('/insertdata', async(req, res) => {
         virtual,
         location
     } = req.body;
-    const central = await CentralNodeAppointments.transaction();
-    const luzon = await LuzonNodeAppointments.transaction();
-    const vismin = await VisMinNodeAppointments.transaction();
+    const central = await centralNodeConnection.transaction();
+    const luzon = await luzonNodeConnection.transaction();
+    const vismin = await visMinNodeConnection.transaction();
     try {
-        const central = await CentralNodeAppointments.transaction();
-            const insertCentralAppointment = await CentralNodeAppointments.create({
-                apptid: apptid,
-                pxid: pxid,
-                clinicid: clinicid,
-                doctorid: doctorid,
-                hospitalname: hospital,
-                mainspecialty: mainspecialty,
-                RegionName: region,
-                status: status,
-                TimeQueued: timequeued,
-                QueueDate: queuedate,
-                StartTime: startime,
-                EndTime: endtime,
-                type: type,
-                Virtual: virtual,
-                Location: location
-            });
+        const insertCentralAppointment = await CentralNodeAppointments.create({
+            apptid: apptid,
+            pxid: pxid,
+            clinicid: clinicid,
+            doctorid: doctorid,
+            hospitalname: hospital,
+            mainspecialty: mainspecialty,
+            RegionName: region,
+            status: status,
+            TimeQueued: timequeued,
+            QueueDate: queuedate,
+            StartTime: startime,
+            EndTime: endtime,
+            type: type,
+            Virtual: virtual,
+            Location: location
+        });
         await central.commit();
         console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
 
@@ -158,7 +157,7 @@ router.post('/insertdata', async(req, res) => {
             });
             await luzon.commit();
             await vismin.commit();
-            console.log('Successfully inserted appointment into central node ', insertLuzonAppointment);
+            console.log('Successfully inserted appointment into luzon node ', insertLuzonAppointment);
         }
         if(location === 'Visayas' || location === 'Mindanao'){
             const insertVisMinAppointment = await VisMinNodeAppointments.create({
@@ -222,6 +221,7 @@ router.post('/updatedata', async(req, res) => {
 
     const central = await centralNodeConnection.transaction();
     const luzon = await luzonNodeConnection.transaction();
+    const vismin = await visMinNodeConnection.transaction();
     try {
         const updateCentralAppointment = await CentralNodeAppointments.update({
             apptid: apptid,
@@ -268,10 +268,41 @@ router.post('/updatedata', async(req, res) => {
                     apptid: apptidSearch
                 }
             });
+            await luzon.commit();
+            await vismin.commit();
+            console.log('Successfully inserted appointment into luzon node ', updateLuzonAppointment);
+        }
+        if(location === 'Visayas' || location === 'Mindanao'){
+            const updateVisMinAppointment = await VisMinNodeAppointments.update({
+                apptid: apptid,
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            }, {
+                where: {
+                    apptid: apptidSearch
+                }
+            });
+            await luzon.commit();
+            await vismin.commit();
+            console.log('Successfully inserted appointment into vismin node ', updateVisMinAppointment);
         }
         res.sendStatus(200);
     } catch(err) {
         await central.rollback();
+        await luzon.rollback();
+        await vismin.rollback();
         console.log('Error updating appointment: ', err);
         res.sendStatus(400);
     }

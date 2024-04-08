@@ -133,31 +133,15 @@
 <div id="search-content" style="display: none;">
     <!--<input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
     <label for="apptid-search-check">Apptid</label><br>-->
-    <form id="search-content-apptid-form" action="/searchdata" method="POST">
+    <form id="search-content-form" action="/searchdata" method="POST">
         <input type="textbox" id="dataType" name="dataType" value="apptid" hidden>
         <label for="apptidQuery">Search Apptid: </label>
         <input type="textbox" id="apptidQuery" name="apptidQuery"><br><br>
-        <input type="submit" value="Search Apptid">
-    </form><br><br><br>
-    <form id="search-content-pxid-form">
-        <label for="search-pxid">Search Pxid: </label>
-        <input type="textbox" id="search-pxid" name="search-pxid"><br><br>
-        <input type="submit" value="Search pxid">
-    </form><br><br><br>
-    <form id="search-content-clinicid-form">
-        <label for="search-clinicid">Search Clinicid: </label>
-        <input type="textbox" id="search-clinicid" name="search-clinicid"><br><br>
-        <input type="submit" value="Search clinicid">
-    </form><br><br><br>
-    <form id="search-content-doctorid-form">
-        <label for="search-doctorid">Search Doctorid: </label>
-        <input type="textbox" id="search-doctorid" name="search-doctorid"><br><br>
-        <input type="submit" value="Search Doctorid">
-    </form><br><br><br>
-    <form id="search-content-mainspecialty-form">
-        <label for="search-mainspecialty">Search Main Specialty: </label>
-        <input type="textbox" id="search-mainspecialty" name="search-mainspecialty"><br><br>
-        <input type="submit" value="Search mainspecialty">
+        <label for="pxidQuery">Search Pxid: </label>
+        <input type="textbox" id="pxidQuery" name="pxidQuery"><br><br>
+        <label for="clinicidQuery">Search clinicidQuery: </label>
+        <input type="textbox" id="clinicidQuery" name="clinicidQuery"><br><br>
+        <input type="submit" value="Search">
     </form><br><br><br>
 </div>
 
@@ -169,11 +153,11 @@
 <div id="loading-csv"></div><br><br><br><br><br><br>
 
 <h1>Table Data (WIP)</h1>
-<a id="show-10" href="/10">SHOW 10 </a>
-<a id="show-25" href="/25">SHOW 25 </a>
-<a id="show-50" href="/50">SHOW 50 </a>
-<a id="show-100" href="/100">SHOW 100 </a>
-<a id="show-all" href="/all">SHOW ALL </a><br><br>
+<a id="show-10" href="/display/10">SHOW 10 </a>
+<a id="show-25" href="/display/25">SHOW 25 </a>
+<a id="show-50" href="/display/50">SHOW 50 </a>
+<a id="show-100" href="/display/100">SHOW 100 </a>
+<a id="show-all" href="/display/all">SHOW ALL </a><br><br>
 <table id="table-data">
     <thead>
         <tr>
