@@ -151,23 +151,99 @@ updateForm.addEventListener('submit', async function(event) {
 
 
 const apptidSearch = document.querySelector('#search-content-form');
-apptidSearch.addEventListener('submit', (event) => {
+apptidSearch.addEventListener('submit', async (event) => {
     event.preventDefault();
-    var searchData = {};
-    const apptidQuery = document.querySelector('#apptidQuery').value;
-    
-    if(apptidQuery){
-        const dataType = 'apptid';
+    let searchData = {};
+    let regionInput = '';
+    let statusInput = '';
+    let virtualInput = '';
+    const apptid = document.querySelector('#apptid-search').value;
+    const pxid = document.querySelector('#pxid-search').value;
+    const clinicid = document.querySelector('#clinicid-search').value;
+    const doctorid = document.querySelector('#doctorid-search').value;
+    const hospital = document.querySelector('#hospital-search').value;
+    const mainspecialty = document.querySelector('#mainspecialty-search').value;
+    const region = document.querySelector('input[name="region-search"]:checked');
+    const status = document.querySelector('input[name="status-search"]:checked');
+    const timequeued = document.querySelector('#timequeued-search').value;
+    const queuedate = document.querySelector('#queuedate-search').value;
+    const startime = document.querySelector('#startime-search').value;
+    const endtime = document.querySelector('#endtime-search').value;
+    const type = document.querySelector('#type-search').value;
+    const virtual = document.querySelector('input[name="virtual-search"]:checked');
+    if(region){
+        regionInput = region.value;
+    }
+    if(status){
+        statusInput = status.value;
+    }
+    if(virtual){
+        virtualInput = virtual.value;
     }
 
-    // const jstring = JSON.stringify({apptidQuery, dataType});
-    // const response = fetch('/searchdata', {
-    //     method: 'POST',
-    //     body: jstring,
-    //     headers: {
-    //         'content-type': 'application/json'
-    //     }
-    // });
+
+    if(!(apptid == '')){
+        searchData.apptid = apptid;
+    }
+    if(!(pxid == '')){
+        searchData.pxid = pxid;
+    }
+    if(!(clinicid == '')){
+        searchData.clinicid = clinicid;
+    }
+    if(!(doctorid == '')){
+        searchData.doctorid = doctorid;
+    }
+    if(!(hospital == '')){
+        searchData.hospitalname = hospital;
+    }
+    if(!(mainspecialty == '')){
+        searchData.mainspecialty = mainspecialty;
+    }
+    if(!(regionInput == '')){
+        searchData.RegionName = regionInput;
+        if(regionInput === 'National Capital Region (NCR)' || regionInput === 'CALABARZON (IV-A)' || regionInput === 'Ilocos Region (I)' || regionInput === 'Bicol Region (V)' || regionInput === 'Central Luzon (III)'){
+            searchData.Location = 'Luzon';
+        } else if(regionInput === 'Central Visayas (VII)' || regionInput === 'Eastern Visayas (VIII)' || regionInput === 'Western Visayas (VI)'){
+            searchData.Location = 'Visayas';
+        } else {
+            searchData.Location = 'Mindanao';
+        }
+    }
+    if(!(statusInput == '')){
+        searchData.status = statusInput;
+    }
+    if(!(timequeued == '')){
+        searchData.TimeQueued = timequeued;
+    }
+    if(!(queuedate == '')){
+        searchData.QueueDate = queuedate;
+    }
+    if(!(startime == '')){
+        searchData.StartTime = startime;
+    }
+    if(!(endtime == '')){
+        searchData.EndTime = endtime.value;
+    }
+    if(!(type == '')){
+        searchData.type = type;
+    }
+    if(!(virtualInput == '')){
+        searchData.Virtual = virtualInput;
+    }
+
+    
+    console.log(searchData);
+    const jstring = JSON.stringify(searchData);
+    
+    
+    const response = await fetch('/searchdata', {
+        method: 'POST',
+        body: jstring,
+        headers: {
+            'content-type': 'application/json'
+        }
+    });
 });
 
 
@@ -261,6 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
         clearTimeout(timeout);
         timeout = setTimeout(function() {
             var textvalue = document.querySelector('#apptid-update-search').value;
+            console.log(textvalue);
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/getformdata', true);
             xhr.setRequestHeader('Content-Type', 'application/json');

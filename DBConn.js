@@ -9,22 +9,14 @@ export const localConnection = new Sequelize('all_appointments', 'root', 'root',
     logging: console.log(),
 });
 
+
+//connects to central node
 export const centralNodeConnection = new Sequelize('all_appointments', 'root', 'root', {
     host: 'ccscloud.dlsu.edu.ph',
     port: 20015,
     dialect: 'mysql',
     logging: console.log()
 });
-
-//connects to central node
-async function setTimeoutTimes() {
-    try {
-    const res1 = await localConnection.query('SET SESSION wait_timeout=300');
-    const res2 = await localConnection.query('SET SESSION interactive_timeout=300');
-    } catch(err){
-        console.log('error changing timeout');
-    }
-}
 
 //connects to Luzon node
 export const luzonNodeConnection = new Sequelize('luzon_appointments', 'root', 'root', {
@@ -41,6 +33,16 @@ export const visMinNodeConnection = new Sequelize('visayas_mindanao_appointments
     dialect: 'mysql',
     logging: console.log()
 });
+
+
+async function setTimeoutTimes() {
+    try {
+    const res1 = await localConnection.query('SET SESSION wait_timeout=300');
+    const res2 = await localConnection.query('SET SESSION interactive_timeout=300');
+    } catch(err){
+        console.log('error changing timeout');
+    }
+}
 
 setTimeoutTimes();
 //add or remove comments for which node you want to connect to

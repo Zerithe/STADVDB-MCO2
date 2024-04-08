@@ -38,14 +38,16 @@ router.get('/display/:displaytablerows', async (req, res) => {
 
 //updates the update form whenever one types the apptid they want to update
 router.post('/getformdata', async(req, res) =>{
+    console.log('get form data called ', req.body.textData);
     const apptidSearch = req.body.textData;
     //transaction handling in sequelize. Not sure if we can use this based on specs
-    const t = await localConnection.transaction();
 
     try{
-        const appointment = await Appointments.findOne({
+        //NEED EDITING HERE FOR WHEN NODE IS DOWN BY USING OTHER NODES TO SEARCH
+        const appointment = await CentralNodeAppointments.findOne({
             where: {apptid: apptidSearch}
         });
+        console.log('gotten data ', appointment);
         if(appointment){
             const formattedAppointment = {
                 apptid: appointment.apptid,
@@ -78,13 +80,13 @@ router.post('/getformdata', async(req, res) =>{
             }
 
             //transaction commit
-            await t.commit()
             console.log('Successfully Fetched Appointment for Updating', formattedAppointment);
             res.json({formattedAppointment});
         }
     } catch(err){
         //change to recovery algorithm 
-        await t.rollback();
+
+
         console.log('Error Fetching Appointment for Update', err);
         res.status(500).send('Error processing request');
     }
@@ -311,22 +313,20 @@ router.post('/updatedata', async(req, res) => {
 router.post('/searchdata', async (req, res) =>{
     console.log('search called');
     console.log(req.body);
-    if(req.body.dataType === 'apptid'){
-        console.log('apptid search');
-        const apptid = req.body.apptidQuery;
-        const t = await localConnection.transaction();
-        try{
-            const searchAppointment = await Appointments.findAll({where: {apptid: apptid}, raw: true});
-            await t.commit();
-            console.log('search appointment complete', searchAppointment);
-            res.render('interface', {
-                title: 'Main Interface',
-                appointments: searchAppointment
-            });
-        } catch(err) {
-            await t.rollback();
-            console.log('Error searching Apptid', err);
-        }
+    const searchData = req.body;
+    console.log(searchData);
+    try{
+        const searchAppointment = await CentralNodeAppointments.findAll({
+            where: searchData, 
+            raw: true
+        });
+        console.log('search appointment complete', searchAppointment);
+        res.render('interface', {
+            title: 'Main Interface',
+            appointments: searchAppointment
+        });
+    } catch(err) {
+        console.log('Error searching', err);
     }
 });
 

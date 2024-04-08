@@ -133,14 +133,60 @@
 <div id="search-content" style="display: none;">
     <!--<input type="checkbox" id="apptid-search-check" name="aptid-search-check" value="apptid">
     <label for="apptid-search-check">Apptid</label><br>-->
-    <form id="search-content-form" action="/searchdata" method="POST">
-        <input type="textbox" id="dataType" name="dataType" value="apptid" hidden>
-        <label for="apptidQuery">Search Apptid: </label>
-        <input type="textbox" id="apptidQuery" name="apptidQuery"><br><br>
-        <label for="pxidQuery">Search Pxid: </label>
-        <input type="textbox" id="pxidQuery" name="pxidQuery"><br><br>
-        <label for="clinicidQuery">Search clinicidQuery: </label>
-        <input type="textbox" id="clinicidQuery" name="clinicidQuery"><br><br>
+    <form id="search-content-form">
+        <label for="apptid-search">Apptid: </label>
+        <input type="text" id="apptid-search" name="apptid-search"><br><br>
+        <label for="pxid-search">Pxid: </label>
+        <input type="text" id="pxid-search" name="pxid-search"><br><br>
+        <label for="clinicid-search">Clinicid: </label>
+        <input type="text" id="clinicid-search" name="clinicid-search"><br><br>
+        <label for="doctorid-search">Doctorid: </label>
+        <input type="text" id="doctorid-search" name="doctorid-search"><br><br>
+        <label for="hospital-search">Hospital: </label>
+        <input type="text" id="hospital-search" name="hospital-search"><br><br>
+        <label for="mainspecialty-search">mainSpecialty: </label>
+        <input type="text" id="mainspecialty-search" name="mainspecialty-search"><br><br>
+        Region:<br>
+        <label for="region-ncr-search">NCR </label>
+        <input type="radio" id="region-ncr-search" name="region-search" value="National Capital Region (NCR)"><br>
+        <label for="region-calabarzon-search">CALABARZON (IV-A)</label>
+        <input type="radio" id="region-calabarzon-search" name="region-search" value="CALABARZON (IV-A)"><br>
+        <label for="region-ilocos-search">Ilocos Region (I) </label>
+        <input type="radio" id="region-ilocos-search" name="region-search" value="Ilocos Region (I)"><br>
+        <label for="region-bicol-search">Bicol Region (V) </label>
+        <input type="radio" id="region-bicol-search" name="region-search" value="Bicol Region (V)"><br>
+        <label for="region-centralluzon-search">Central Luzon (III) </label>
+        <input type="radio" id="region-centralluzon-search" name="region-search" value="Central Luzon (III)"><br>
+        <label for="region-centralvisayas-search">Central Visayas (VII) </label>
+        <input type="radio" id="region-centralvisayas-search" name="region-search" value="Central Visayas (VII)"><br>
+        <label for="region-easternvisayas-search">Eastern Visayas (VIII) </label>
+        <input type="radio" id="region-easternvisayas-search" name="region-search" value="Eastern Visayas (VIII)"><br>
+        <label for="region-westernvisayas-search">Western Visayas (VI) </label>
+        <input type="radio" id="region-westernvisayas-search" name="region-search" value="Western Visayas (VI)"><br>
+        <label for="region-soccsksargen-search">SOCCSKSARGEN (Cotabato Region) (XII) </label>
+        <input type="radio" id="region-soccsksargen-search" name="region-search" value="SOCCSKSARGEN (Cotabato Region) (XII)"><br>
+        <label for="region-northernmindanao-search">Northern Mindanao (X) </label>
+        <input type="radio" id="region-northernmindanao-search" name="region-search" value="Northern Mindanao (X)"><br><br>
+        Status:<br>
+        <label for="status-queued-search">Queued </label>
+        <input type="radio" id="status-queued-search" name="status-search" value="Queued"><br>
+        <label for="status-complete-search">Complete </label>
+        <input type="radio" id="status-complete-search" name="status-search" value="Complete"><br><br>
+        <label for="timequeued-search">Time Queued: </label>
+        <input type="datetime-local" id="timequeued-search" name="timequeued-search"><br><br>
+        <label for="queuedate-search">Queue Date: </label>
+        <input type="datetime-local" id="queuedate-search" name="queuedate-search"><br><br>
+        <label for="startime-search">Start Time: </label>
+        <input type="datetime-local" id="startime-search" name="startime-search"><br><br>
+        <label for="endtime-search">End Time: </label>
+        <input type="datetime-local" id="endtime-search" name="endtime-search"><br><br>
+        <label for="type-search">Type: </label>
+        <input type="text" id="type-search" name="type-search"><br><br><br>
+        Virtual:<br>
+        <label for="virtual-true-search">True </label>
+        <input type="radio" id="virtual-true-search" name="virtual-search" value="1"><br>
+        <label for="virtual-false-search">False </label>
+        <input type="radio" id="virtual-false-search" name="virtual-search" value="0"><br><br>
         <input type="submit" value="Search">
     </form><br><br><br>
 </div>
