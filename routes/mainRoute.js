@@ -1,4 +1,4 @@
-import { Appointments } from '../DBConn.js';
+import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments } from '../DBConn.js';
 import {Router} from 'express';
 import { localConnection } from '../DBConn.js';
 import csvParser from 'csv-parser';
@@ -9,7 +9,26 @@ const router = Router();
 
 //shows main page
 router.get('/', async (req, res) => {
-    const getAppointments = await Appointments.findAll({limit: 10, raw:true});
+    const getAppointments = await CentralNodeAppointments.findAll({limit: 10, raw:true});
+    res.render('interface', {
+        title: 'Main Interface',
+        appointments: getAppointments
+    });
+});
+
+router.get('/display/:displaytablerows', async (req, res) => {
+    const tablerows = req.params.displaytablerows;
+    var getAppointments = null;
+    const t = await localConnection.transaction();
+
+    if(tablerows === 'all'){
+        getAppointments = await CentralNodeAppointments.findAll({raw:true});
+    } else {
+        const tablerowsInt = parseInt(tablerows);
+        console.log(tablerowsInt);
+        getAppointments = await CentralNodeAppointments.findAll({limit: tablerowsInt, raw:true});
+    }
+    await t.commit();
     res.render('interface', {
         title: 'Main Interface',
         appointments: getAppointments
@@ -229,7 +248,7 @@ router.get('/importcsv', async (req, res) => {
                 }
             }
             try{
-                await Appointments.create(record);
+                await CentralNodeAppointments.create(record);
             } catch(err) {
                 console.error('Error inserting records', err);
                 console.log(record);
@@ -248,24 +267,6 @@ router.get('/importcsv', async (req, res) => {
     
 });
 
-router.get('/:displaytablerows', async (req, res) => {
-    const tablerows = req.params.displaytablerows;
-    var getAppointments = null;
-    const t = await localConnection.transaction();
-
-    if(tablerows === 'all'){
-        getAppointments = await Appointments.findAll({raw:true});
-    } else {
-        const tablerowsInt = parseInt(tablerows);
-        console.log(tablerowsInt);
-        getAppointments = await Appointments.findAll({limit: tablerowsInt, raw:true});
-    }
-    await t.commit();
-    res.render('interface', {
-        title: 'Main Interface',
-        appointments: getAppointments
-    });
-});
 
 export default router;
 
