@@ -198,11 +198,27 @@
 </div>
 <div id="report-results"></div><br><br>
 
-<button id="import-csv-local">IMPORT APPOINTMENTS CSV TO LOCAL NODE</button><br><br> <!--TEMPORARY, DELETE WHEN DEPLOYING-->
+<button id="sync-data-central">SYNC DATA TO CENTRAL NODE</button><br><br>
+<div id="sync-data-central-queue"></div>
+<button id="sync-data-luzon-vismin">SYNC DATA TO LUZON AND VISMIN NODE</button><br><br>
+<div id="sync-data-central-queue"></div>
+
+<!--<button id="import-csv-local">IMPORT APPOINTMENTS CSV TO LOCAL NODE</button><br><br>TEMPORARY, DELETE WHEN DEPLOYING-->
 <button id="import-csv">IMPORT APPOINTMENTS CSV TO CENTRAL NODE</button><br><br>
 <button id="import-csv-luzon">IMPORT APPOINTMENTS CSV TO LUZON NODE</button><br><br>
 <button id="import-csv-vismin">IMPORT APPOINTMENTS CSV TO VISMIN NODE</button><br><br><br>
 <div id="loading-csv"></div><br><br><br><br><br><br>
+
+
+<div id="node-status">{{nodeStatus}}</div><br><br>
+<div id="queue-status">
+    Central Node Insert Queue: {{centralNodeQueueInsert}} <br><br>
+    Central Node Update Queue: {{centralNodeQueueUpdate}} <br><br>
+    Luzon Node Insert Queue: {{luzonNodeQueueInsert}} <br><br>
+    Luzon Node Update Queue: {{luzonNodeQueueUpdate}} <br><br>
+    VisMin Node Insert Queue: {{visMinNodeQueueInsert}} <br><br>
+    VisMin Node Update Queue: {{visMinNodeQueueUpdate}} <br><br>
+</div><br><br>
 
 <h1>Table Data (WIP)</h1>
 <a id="show-10" href="/display/10">SHOW 10 </a>

@@ -81,10 +81,14 @@ insertForm.addEventListener('submit', async function(event) {
             const result = document.querySelector('#insert-results');
             alert('Succesfully Inserted Appointment');
             location.reload;
+        } else {
+            alert('Error Inserting Appointment');
+            location.reload;
         }
     } catch(err) {
         console.log('Error Inserting Appointment', err.message);
         alert('Error Inserting Appointment');
+        location.reload;
     }
 });
 
@@ -285,7 +289,7 @@ countMainSpecialty.addEventListener('click', async () => {
     }
 });
 
-
+/*
 //TEMPORARY FUNCTION, DELETE WHEN DEPLOYING
 const importLocalCsvBtn = document.querySelector('#import-csv-local');
 importLocalCsvBtn.addEventListener('click', async () => {
@@ -305,7 +309,7 @@ importLocalCsvBtn.addEventListener('click', async () => {
         console.log(err);
     }
 });
-
+*/
 
 const importCsvBtn = document.querySelector('#import-csv');
 importCsvBtn.addEventListener('click', async () => {

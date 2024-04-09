@@ -1,22 +1,96 @@
-import { Appointments, CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments, centralNodeConnection, luzonNodeConnection, visMinNodeConnection } from '../DBConn.js';
+import { CentralNodeAppointments, LuzonNodeAppointments, VisMinNodeAppointments, centralNodeConnection, luzonNodeConnection, visMinNodeConnection } from '../DBConn.js';
 import {Router} from 'express';
-import { localConnection } from '../DBConn.js';
 import csvParser from 'csv-parser';
 import fs from 'fs';
 import { Sequelize } from 'sequelize';
+import { testConnection } from '../app.js';
+import { nodeStatus } from '../app.js';
 
+var centralQueueInsert = [];
+var centralQueueUpdate = [];
+var luzonQueueInsert = [];
+var luzonQueueUpdate = [];
+var visMinQueueInsert = [];
+var visMinQueueUpdate = [];
 
 const router = Router();
 
 //shows main page
 router.get('/', async (req, res) => {
-    const getAppointments = await CentralNodeAppointments.findAll({limit: 10, raw:true});
-    res.render('interface', {
-        title: 'Main Interface',
-        appointments: getAppointments
-    });
+    if(!isCentralNodeUp){
+        testConnection(centralNodeConnection, 'Central Node');
+    }
+    if(!isLuzonNodeUp){
+        testConnection(luzonNodeConnection, 'Luzon Node');
+    }
+    if(!isVisMinNodeUp){
+        testConnection(visMinNodeConnection, 'VisMin Node');
+    }
+    try {
+        const getAppointments = await CentralNodeAppointments.findAll({ limit: 50, raw:true});
+        const nodes = `
+        Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
+        Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
+        VisMin Node: ${nodeStatus.isVisMinNodeUp ? 'Online' : 'Offline'}
+    `
+        const centralNodeQueueInsert = centralQueueInsert.length;
+        const centralNodeQueueUpdate = centralQueueUpdate.length;
+        const luzonNodeQueueInsert = luzonQueueInsert.length;
+        const luzonNodeQueueUpdate = luzonQueueUpdate.length;
+        const visMinNodeQueueInsert = visMinQueueInsert.length;
+        const visMinNodeQueueUpdate = visMinQueueUpdate.length;
+        res.render('interface', {
+            title: 'Main Interface',
+            appointments: getAppointments,
+            nodeStatus: nodes,
+            centralNodeQueueInsert: centralNodeQueueInsert,
+            centralNodeQueueUpdate: centralNodeQueueUpdate,
+            luzonNodeQueueInsert: luzonNodeQueueInsert,
+            luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+            visMinNodeQueueInsert: visMinNodeQueueInsert,
+            visMinNodeQueueUpdate: visMinNodeQueueUpdate
+        });
+    } catch(centralErr) {
+        console.log('Central Node Connection Lost ', centralErr);
+        nodeStatus.isCentralNodeUp = false;
+        console.log('Trying Regional nodes');
+        try {
+            const getLuzonAppointments = await LuzonNodeAppointments.findAll({limit: 50, raw: true});
+            const getVisMinAppointments = await VisMinNodeAppointments.findAll({limit: 50, raw: true});
+            const getAppointments = getLuzonAppointments.concat(getVisMinAppointments);
+            const nodes = `
+            Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
+            Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
+            VisMin Node: ${nodeStatus.isVisMinNodeUp ? 'Online' : 'Offline'}
+            `
+            const centralNodeQueueInsert = centralQueueInsert.length;
+            const centralNodeQueueUpdate = centralQueueUpdate.length;
+            const luzonNodeQueueInsert = luzonQueueInsert.length;
+            const luzonNodeQueueUpdate = luzonQueueUpdate.length;
+            const visMinNodeQueueInsert = visMinQueueInsert.length;
+            const visMinNodeQueueUpdate = visMinQueueUpdate.length;
+            res.render('interface', {
+                title: 'Main Interface',
+                appointments: getAppointments,
+                centralNodeQueueInsert: centralNodeQueueInsert,
+                centralNodeQueueUpdate: centralNodeQueueUpdate,
+                luzonNodeQueueInsert: luzonNodeQueueInsert,
+                luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                visMinNodeQueueInsert: visMinNodeQueueInsert,
+                visMinNodeQueueUpdate: visMinNodeQueueUpdate
+            });
+        } catch(regionalErr) {
+            console.log('Regional Node connection lost: ', regionalErr);
+            nodeStatus.isLuzonNodeUp = false;
+            nodeStatus.isVisMinNodeUp = false;
+            res.render('interface', {
+                title: 'Main Interface'
+            });
+        }
+    }
 });
 
+/*
 router.get('/display/:displaytablerows', async (req, res) => {
     const tablerows = req.params.displaytablerows;
     var getAppointments = null;
@@ -34,7 +108,7 @@ router.get('/display/:displaytablerows', async (req, res) => {
         title: 'Main Interface',
         appointments: getAppointments
     });
-});
+});*/
 
 
 //updates the update form whenever one types the apptid they want to update
@@ -115,82 +189,173 @@ router.post('/insertdata', async(req, res) => {
         virtual,
         location
     } = req.body;
-    const central = await centralNodeConnection.transaction();
-    const luzon = await luzonNodeConnection.transaction();
-    const vismin = await visMinNodeConnection.transaction();
+
     try {
-        const insertCentralAppointment = await CentralNodeAppointments.create({
-            apptid: apptid,
-            pxid: pxid,
-            clinicid: clinicid,
-            doctorid: doctorid,
-            hospitalname: hospital,
-            mainspecialty: mainspecialty,
-            RegionName: region,
-            status: status,
-            TimeQueued: timequeued,
-            QueueDate: queuedate,
-            StartTime: startime,
-            EndTime: endtime,
-            type: type,
-            Virtual: virtual,
-            Location: location
+        const [insertCentralAppointment, created] = await CentralNodeAppointments.findOrCreate({
+            where: {apptid: apptid},
+            defaults: {
+                pxid: pxid,
+                clinicid: clinicid,
+                doctorid: doctorid,
+                hospitalname: hospital,
+                mainspecialty: mainspecialty,
+                RegionName: region,
+                status: status,
+                TimeQueued: timequeued,
+                QueueDate: queuedate,
+                StartTime: startime,
+                EndTime: endtime,
+                type: type,
+                Virtual: virtual,
+                Location: location
+            }
         });
-        await central.commit();
-        console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
-
-
-        if(location === 'Luzon'){
-            const insertLuzonAppointment = await LuzonNodeAppointments.create({
-                apptid: apptid,
-                pxid: pxid,
-                clinicid: clinicid,
-                doctorid: doctorid,
-                hospitalname: hospital,
-                mainspecialty: mainspecialty,
-                RegionName: region,
-                status: status,
-                TimeQueued: timequeued,
-                QueueDate: queuedate,
-                StartTime: startime,
-                EndTime: endtime,
-                type: type,
-                Virtual: virtual,
-                Location: location
-            });
-            await luzon.commit();
-            await vismin.commit();
-            console.log('Successfully inserted appointment into luzon node ', insertLuzonAppointment);
+        if(created){
+            console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
+        } else {
+             console.log('Appointment already in Central Node', insertCentralAppointment);
         }
-        if(location === 'Visayas' || location === 'Mindanao'){
-            const insertVisMinAppointment = await VisMinNodeAppointments.create({
-                apptid: apptid,
-                pxid: pxid,
-                clinicid: clinicid,
-                doctorid: doctorid,
-                hospitalname: hospital,
-                mainspecialty: mainspecialty,
-                RegionName: region,
-                status: status,
-                TimeQueued: timequeued,
-                QueueDate: queuedate,
-                StartTime: startime,
-                EndTime: endtime,
-                type: type,
-                Virtual: virtual,
-                Location: location
-            });
-            await vismin.commit();
-            await luzon.commit();
-            console.log('Successfully inserted appointment into vismin node', insertVisMinAppointment);
+        try {
+            if(location === 'Luzon'){
+                const [insertLuzonAppointment, created] = await LuzonNodeAppointments.findOrCreate({
+                    where: {apptid: apptid},
+                    defaults: {
+                        pxid: pxid,
+                        clinicid: clinicid,
+                        doctorid: doctorid,
+                        hospitalname: hospital,
+                        mainspecialty: mainspecialty,
+                        RegionName: region,
+                        status: status,
+                        TimeQueued: timequeued,
+                        QueueDate: queuedate,
+                        StartTime: startime,
+                        EndTime: endtime,
+                        type: type,
+                        Virtual: virtual,
+                        Location: location
+                    }
+                });
+                if(created){
+                    console.log('Successfully inserted appointment into luzon node ', insertLuzonAppointment);
+                    res.sendStatus(200);
+                } else {
+                    console.log('Appointment already in Luzon Node', insertLuzonAppointment);
+                    res.sendStatus(500);
+                }
+            }
+            if(location === 'Visayas' || location === 'Mindanao'){
+                const [insertVisMinAppointment, created] = await VisMinNodeAppointments.findOrCreate({
+                    where: {apptid: apptid},
+                    defaults: {
+                        pxid: pxid,
+                        clinicid: clinicid,
+                        doctorid: doctorid,
+                        hospitalname: hospital,
+                        mainspecialty: mainspecialty,
+                        RegionName: region,
+                        status: status,
+                        TimeQueued: timequeued,
+                        QueueDate: queuedate,
+                        StartTime: startime,
+                        EndTime: endtime,
+                        type: type,
+                        Virtual: virtual,
+                        Location: location
+                    }
+                });
+                if(created){
+                    console.log('Successfully inserted appointment into vismin node', insertVisMinAppointment);
+                    res.sendStatus(200);
+                } else{
+                    console.log('Appointment already in VisMin Node', insertVisMinAppointment);
+                    res.sendStatus(500);
+                }
+            }
+        } catch(regionalErr){
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+                luzonQueueInsert.push(apptid);
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+                visMinQueueInsert.push(apptid);
+            }
+            res.sendStatus(500);
         }
-        res.sendStatus(200);
-    } catch(err) {
-        await central.rollback();
-        await luzon.rollback();
-        await vismin.rollback();
-        console.log('Error inserting appointment: ', err);
-        res.sendStatus(400);
+    } catch(centralErr) {
+        console.log('Central Node Connection Lost ', centralErr);
+        nodeStatus.isCentralNodeUp = false;
+        centralQueueInsert.push(apptid);
+        console.log('Trying Regional nodes');
+        try {
+            if(location === 'Luzon'){
+                const [insertLuzonAppointment, created] = await LuzonNodeAppointments.findOrCreate({
+                    where: {apptid: apptid},
+                    defaults: {
+                        pxid: pxid,
+                        clinicid: clinicid,
+                        doctorid: doctorid,
+                        hospitalname: hospital,
+                        mainspecialty: mainspecialty,
+                        RegionName: region,
+                        status: status,
+                        TimeQueued: timequeued,
+                        QueueDate: queuedate,
+                        StartTime: startime,
+                        EndTime: endtime,
+                        type: type,
+                        Virtual: virtual,
+                        Location: location
+                    }
+                });
+                if(created){
+                    console.log('Successfully inserted appointment into luzon node ', insertLuzonAppointment);
+                    res.sendStatus(200);
+                } else {
+                    console.log('Appointment already in Luzon Node', insertLuzonAppointment);
+                    res.sendStatus(500);
+                }
+            }
+            if(location === 'Visayas' || location === 'Mindanao'){
+                const [insertVisMinAppointment, created] = await VisMinNodeAppointments.findOrCreate({
+                    where: {apptid: apptid},
+                    defaults: {
+                        pxid: pxid,
+                        clinicid: clinicid,
+                        doctorid: doctorid,
+                        hospitalname: hospital,
+                        mainspecialty: mainspecialty,
+                        RegionName: region,
+                        status: status,
+                        TimeQueued: timequeued,
+                        QueueDate: queuedate,
+                        StartTime: startime,
+                        EndTime: endtime,
+                        type: type,
+                        Virtual: virtual,
+                        Location: location
+                    }
+                });
+                if(created){
+                    console.log('Successfully inserted appointment into vismin node', insertVisMinAppointment);
+                    res.sendStatus(200);
+                } else{
+                    console.log('Appointment already in VisMin Node', insertVisMinAppointment);
+                    res.sendStatus(500);
+                }
+            }
+        } catch(regionalErr) {
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+                luzonQueueInsert.push(apptid);
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+                visMinQueueInsert.push(apptid);
+            }
+            res.sendStatus(500);
+        }
     }
 });
 
@@ -222,9 +387,6 @@ router.post('/updatedata', async(req, res) => {
         location
     } = req.body;
 
-    const central = await centralNodeConnection.transaction();
-    const luzon = await luzonNodeConnection.transaction();
-    const vismin = await visMinNodeConnection.transaction();
     try {
         const updateCentralAppointment = await CentralNodeAppointments.update({
             apptid: apptid,
@@ -247,78 +409,191 @@ router.post('/updatedata', async(req, res) => {
                 apptid: apptidSearch
             }
         });
-        await central.commit();
         console.log('Successfully updated appointment', updateCentralAppointment);
-        if(location === 'Luzon'){
-            const updateLuzonAppointment = await LuzonNodeAppointments.update({
-                apptid: apptid,
-                pxid: pxid,
-                clinicid: clinicid,
-                doctorid: doctorid,
-                hospitalname: hospital,
-                mainspecialty: mainspecialty,
-                RegionName: region,
-                status: status,
-                TimeQueued: timequeued,
-                QueueDate: queuedate,
-                StartTime: startime,
-                EndTime: endtime,
-                type: type,
-                Virtual: virtual,
-                Location: location
-            }, {
-                where: {
-                    apptid: apptidSearch
-                }
-            });
-            await luzon.commit();
-            await vismin.commit();
-            console.log('Successfully inserted appointment into luzon node ', updateLuzonAppointment);
+        try {
+            if(location === 'Luzon'){
+                const updateLuzonAppointment = await LuzonNodeAppointments.update({
+                    apptid: apptid,
+                    pxid: pxid,
+                    clinicid: clinicid,
+                    doctorid: doctorid,
+                    hospitalname: hospital,
+                    mainspecialty: mainspecialty,
+                    RegionName: region,
+                    status: status,
+                    TimeQueued: timequeued,
+                    QueueDate: queuedate,
+                    StartTime: startime,
+                    EndTime: endtime,
+                    type: type,
+                    Virtual: virtual,
+                    Location: location
+                }, {
+                    where: {
+                        apptid: apptidSearch
+                    }
+                });
+                console.log('Successfully inserted appointment into luzon node ', updateLuzonAppointment);
+            }
+            if(location === 'Visayas' || location === 'Mindanao'){
+                const updateVisMinAppointment = await VisMinNodeAppointments.update({
+                    apptid: apptid,
+                    pxid: pxid,
+                    clinicid: clinicid,
+                    doctorid: doctorid,
+                    hospitalname: hospital,
+                    mainspecialty: mainspecialty,
+                    RegionName: region,
+                    status: status,
+                    TimeQueued: timequeued,
+                    QueueDate: queuedate,
+                    StartTime: startime,
+                    EndTime: endtime,
+                    type: type,
+                    Virtual: virtual,
+                    Location: location
+                }, {
+                    where: {
+                        apptid: apptidSearch
+                    }
+                });
+                console.log('Successfully inserted appointment into vismin node ', updateVisMinAppointment);
+            }
+            res.sendStatus(200);
+        } catch(regionalErr){
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+                luzonQueueUpdate.push(apptidSearch);
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+                visMinQueueUpdate.push(apptidSearch);
+            }
+            res.sendStatus(500);
         }
-        if(location === 'Visayas' || location === 'Mindanao'){
-            const updateVisMinAppointment = await VisMinNodeAppointments.update({
-                apptid: apptid,
-                pxid: pxid,
-                clinicid: clinicid,
-                doctorid: doctorid,
-                hospitalname: hospital,
-                mainspecialty: mainspecialty,
-                RegionName: region,
-                status: status,
-                TimeQueued: timequeued,
-                QueueDate: queuedate,
-                StartTime: startime,
-                EndTime: endtime,
-                type: type,
-                Virtual: virtual,
-                Location: location
-            }, {
-                where: {
-                    apptid: apptidSearch
-                }
-            });
-            await luzon.commit();
-            await vismin.commit();
-            console.log('Successfully inserted appointment into vismin node ', updateVisMinAppointment);
+    } catch(centralErr) {
+        console.log('Central Node Connection Lost ', centralErr);
+        nodeStatus.isCentralNodeUp = false;
+        centralQueueUpdate.push(apptidSearch);
+        console.log('Trying Regional nodes');
+        try {
+            if(location === 'Luzon'){
+                const updateLuzonAppointment = await LuzonNodeAppointments.update({
+                    apptid: apptid,
+                    pxid: pxid,
+                    clinicid: clinicid,
+                    doctorid: doctorid,
+                    hospitalname: hospital,
+                    mainspecialty: mainspecialty,
+                    RegionName: region,
+                    status: status,
+                    TimeQueued: timequeued,
+                    QueueDate: queuedate,
+                    StartTime: startime,
+                    EndTime: endtime,
+                    type: type,
+                    Virtual: virtual,
+                    Location: location
+                }, {
+                    where: {
+                        apptid: apptidSearch
+                    }
+                });
+                console.log('Successfully inserted appointment into luzon node ', updateLuzonAppointment);
+            }
+            if(location === 'Visayas' || location === 'Mindanao'){
+                const updateVisMinAppointment = await VisMinNodeAppointments.update({
+                    apptid: apptid,
+                    pxid: pxid,
+                    clinicid: clinicid,
+                    doctorid: doctorid,
+                    hospitalname: hospital,
+                    mainspecialty: mainspecialty,
+                    RegionName: region,
+                    status: status,
+                    TimeQueued: timequeued,
+                    QueueDate: queuedate,
+                    StartTime: startime,
+                    EndTime: endtime,
+                    type: type,
+                    Virtual: virtual,
+                    Location: location
+                }, {
+                    where: {
+                        apptid: apptidSearch
+                    }
+                });
+                console.log('Successfully inserted appointment into vismin node ', updateVisMinAppointment);
+            }
+            res.sendStatus(200);
+        } catch(regionalErr) {
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+                luzonQueueUpdate.push(apptidSearch)
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+                visMinQueueUpdate.push(apptidSearch);
+            }
+            res.sendStatus(500);
         }
-        res.sendStatus(200);
-    } catch(err) {
-        await central.rollback();
-        await luzon.rollback();
-        await vismin.rollback();
-        console.log('Error updating appointment: ', err);
-        res.sendStatus(400);
     }
 });
 
 router.get('/results', async (req, res) => {
     const searchData = req.query;
     console.log('Search data Recieved', searchData);
+
+    try{
+        const searchAppointment = await CentralNodeAppointments.findAll({
+            where: searchData,
+            raw: true
+        });
+        if(searchAppointment.length == 0){
+            try{
+                const luzonSearchAppointment = await LuzonNodeAppointments.findAll({
+                    where: searchData,
+                    raw: true
+                });
+                if(luzonSearchAppointment.length == 0){
+                    try{
+                        const visMinSearchAppointment = await VisMinNodeAppointments.findAll({
+                            where: searchData,
+                            raw: true
+                        });
+                        if(visMinSearchAppointment){
+
+                        }
+                    } catch(visminerror){
+                        
+                    }
+                } else {
+                    res.render('interface', {
+                        title: 'Main Interface',
+                        appointments: luzonSearchAppointment
+                    });
+                }
+            } catch(luzonerr){
+
+            }
+        } else {
+            res.render('interface', {
+                title: 'Main Interface',
+                appointments: searchAppointment
+            });
+        }
+    } catch(centralerr){
+        
+    }
+/*
     try{//add crashing and recovery handling for other nodes
         const searchAppointment = await CentralNodeAppointments.findAll({
             where: searchData,
             raw: true
         });
+        if(searchAppointment.length == 0){
+            console.log('appointment not found');
+        }
         console.log('search appointment complete', searchAppointment);
         res.render('interface', {
             title: 'Main Interface',
@@ -326,7 +601,7 @@ router.get('/results', async (req, res) => {
         });
     } catch(err) {
         console.log('Error searching', err);
-    }
+    }*/
 });
 
 router.get('/locationcountreport', async (req, res) => {
@@ -364,7 +639,7 @@ router.get('/mainspecialtycountreport', async (req, res) => {
 });
 
 
-
+/*
 //TEMPORARY FUNCTION DELETE WHEN DEPLOYING
 router.get('/importcsvlocal', async (req, res) => {
     console.log('CSV IMPORT CALLED');
@@ -402,6 +677,7 @@ router.get('/importcsvlocal', async (req, res) => {
         res.sendStatus(500);
     }
 });
+*/
 
 router.get('/importcsv', async (req, res) => {
     console.log('CSV IMPORT CALLED');
@@ -545,3 +821,43 @@ for await (const record of csvStream) {
             }
         }
 */ 
+
+
+/*
+try {
+        
+        try {
+            
+            res.sendStatus(200);
+        } catch(regionalErr){
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+                
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+                
+            }
+            res.sendStatus(500);
+        }
+    } catch(centralErr) {
+        console.log('Central Node Connection Lost ', centralErr);
+        nodeStatus.isCentralNodeUp = false;
+        
+        console.log('Trying Regional nodes');
+        try {
+            
+        } catch(regionalErr) {
+            console.log('Regional Node connection lost: ', regionalErr);
+            if(location === 'Luzon') {
+                nodeStatus.isLuzonNodeUp = false;
+            } else {
+                nodeStatus.isVisMinNodeUp = false;
+            }
+            res.sendStatus(500);
+        }
+    }
+
+
+
+*/
