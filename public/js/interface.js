@@ -1,6 +1,7 @@
 const insertBtn = document.querySelector('#insert');
 const updateBtn = document.querySelector('#update');
 const searchBtn = document.querySelector('#search');
+const reportBtn = document.querySelector('#report');
 
 insertBtn.addEventListener('click', (e) => {
     var insertContent = document.querySelector('#insert-content');
@@ -12,11 +13,15 @@ updateBtn.addEventListener('click', (e) => {
     updateContent.style.display = updateContent.style.display === 'none' ? 'block' : 'none';
 });
 
-searchBtn.addEventListener('click', (E) => {
+searchBtn.addEventListener('click', (e) => {
     var searchContent = document.querySelector('#search-content');
     searchContent.style.display = searchContent.style.display === 'none' ? 'block' : 'none';
 });
 
+reportBtn.addEventListener('click', (e) =>{
+    var reportContent = document.querySelector('#report-content');
+    reportContent.style.display = reportContent.style.display === 'none' ? 'block' : 'none';
+});
 
 const insertForm = document.querySelector('#insert-content-form');
 insertForm.addEventListener('submit', async function(event) {
@@ -244,14 +249,40 @@ apptidSearch.addEventListener('submit', async (event) => {
     }
 
     window.location.href = `/results?${params.toString()}`;
-    
-    // const response = await fetch('/searchdata', {
-    //     method: 'POST',
-    //     body: jstring,
-    //     headers: {
-    //         'content-type': 'application/json'
-    //     }
-    // });
+});
+
+const countLocationBtn = document.querySelector('#count-by-location');
+countLocationBtn.addEventListener('click', async () => {
+    const response = await fetch('/locationcountreport', {
+        method: 'GET'
+    });
+    if(response.ok){
+        const data = await response.json();
+        console.log('report data: ', data);
+        const reportResults = document.querySelector('#report-results');
+        reportResults.innerHTML = '';
+        reportResults.innerHTML += `Appointments Per Location: <br>`;
+        data.forEach(report => {
+            reportResults.innerHTML += `${report.Location}: ${report.apptidCount} <br>`;
+        });
+    }
+});
+
+const countMainSpecialty = document.querySelector('#count-by-mainspecialty');
+countMainSpecialty.addEventListener('click', async () => {
+    const response = await fetch('/mainspecialtycountreport', {
+        method: 'GET'
+    });
+    if(response.ok){
+        const data = await response.json();
+        console.log('report data: ', data);
+        const reportResults = document.querySelector('#report-results');
+        reportResults.innerHTML = '';
+        reportResults.innerHTML += `Appointments Per Main Specialty: <br>`;
+        data.forEach(report => {
+            reportResults.innerHTML += `${report.mainspecialty}: ${report.apptidCount} <br>`;
+        });
+    }
 });
 
 

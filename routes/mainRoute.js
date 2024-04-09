@@ -3,6 +3,7 @@ import {Router} from 'express';
 import { localConnection } from '../DBConn.js';
 import csvParser from 'csv-parser';
 import fs from 'fs';
+import { Sequelize } from 'sequelize';
 
 
 const router = Router();
@@ -310,30 +311,10 @@ router.post('/updatedata', async(req, res) => {
     }
 });
 
-router.post('/searchdata', async (req, res) =>{
-    console.log('search called');
-    console.log(req.body);
-    const searchData = req.body;
-    console.log(searchData);
-    try{
-        const searchAppointment = await CentralNodeAppointments.findAll({
-            where: searchData, 
-            raw: true
-        });
-        console.log('search appointment complete', searchAppointment);
-        res.render('interface', {
-            title: 'Main Interface',
-            appointments: searchAppointment
-        });
-    } catch(err) {
-        console.log('Error searching', err);
-    }
-});
-
 router.get('/results', async (req, res) => {
     const searchData = req.query;
     console.log('Search data Recieved', searchData);
-    try{
+    try{//add crashing and recovery handling for other nodes
         const searchAppointment = await CentralNodeAppointments.findAll({
             where: searchData,
             raw: true
@@ -347,6 +328,41 @@ router.get('/results', async (req, res) => {
         console.log('Error searching', err);
     }
 });
+
+router.get('/locationcountreport', async (req, res) => {
+    try{
+        const reportAppointment = await CentralNodeAppointments.findAll({
+            attributes: [
+                'Location',
+                [Sequelize.fn('COUNT', Sequelize.col('apptid')), 'apptidCount']
+            ],
+            group: 'Location',
+            raw: true
+        });
+        console.log('report generated ', reportAppointment);
+        res.json(reportAppointment);
+    } catch(err) {
+        console.log('Error generating report ', err);
+    }
+});
+
+router.get('/mainspecialtycountreport', async (req, res) => {
+    try{
+        const reportAppointment = await CentralNodeAppointments.findAll({
+            attributes: [
+                'mainspecialty',
+                [Sequelize.fn('COUNT', Sequelize.col('apptid')), 'apptidCount']
+            ],
+            group: 'mainspecialty',
+            raw: true
+        });
+        console.log('report generated ', reportAppointment);
+        res.json(reportAppointment);
+    } catch(err) {
+        console.log('Error generating report ', err);
+    }
+});
+
 
 
 //TEMPORARY FUNCTION DELETE WHEN DEPLOYING
