@@ -17,7 +17,7 @@ export const centralNodeConnection = new Sequelize('all_appointments', 'root', '
     port: 20015,
     dialect: 'mysql',
     logging: console.log(),
-    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.COMMITTED
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.UNCOMMITTED
 });
 
 //connects to Luzon node
@@ -26,7 +26,7 @@ export const luzonNodeConnection = new Sequelize('luzon_appointments', 'root', '
     port: 20016,
     dialect: 'mysql',
     logging: console.log(),
-    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.COMMITTED
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.UNCOMMITTED
 });
 
 //connects to VisMin node
@@ -35,7 +35,7 @@ export const visMinNodeConnection = new Sequelize('visayas_mindanao_appointments
     port: '20017',
     dialect: 'mysql',
     logging: console.log(),
-    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.COMMITTED
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.UNCOMMITTED
 });
 
 
