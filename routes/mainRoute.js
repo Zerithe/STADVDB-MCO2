@@ -330,6 +330,24 @@ router.post('/searchdata', async (req, res) =>{
     }
 });
 
+router.get('/results', async (req, res) => {
+    const searchData = req.query;
+    console.log('Search data Recieved', searchData);
+    try{
+        const searchAppointment = await CentralNodeAppointments.findAll({
+            where: searchData,
+            raw: true
+        });
+        console.log('search appointment complete', searchAppointment);
+        res.render('interface', {
+            title: 'Main Interface',
+            appointments: searchAppointment
+        });
+    } catch(err) {
+        console.log('Error searching', err);
+    }
+});
+
 
 //TEMPORARY FUNCTION DELETE WHEN DEPLOYING
 router.get('/importcsvlocal', async (req, res) => {

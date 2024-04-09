@@ -236,14 +236,22 @@ apptidSearch.addEventListener('submit', async (event) => {
     console.log(searchData);
     const jstring = JSON.stringify(searchData);
     
-    
-    const response = await fetch('/searchdata', {
-        method: 'POST',
-        body: jstring,
-        headers: {
-            'content-type': 'application/json'
+    const params = new URLSearchParams();
+    for(const key in searchData) {
+        if(searchData[key] !== '') {
+            params.append(key, searchData[key]);
         }
-    });
+    }
+
+    window.location.href = `/results?${params.toString()}`;
+    
+    // const response = await fetch('/searchdata', {
+    //     method: 'POST',
+    //     body: jstring,
+    //     headers: {
+    //         'content-type': 'application/json'
+    //     }
+    // });
 });
 
 
