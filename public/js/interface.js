@@ -357,7 +357,7 @@ importCsvVisMinBtn.addEventListener('click', async () => {
 
 const syncDataCentral = document.querySelector('#sync-data-central');
 syncDataCentral.addEventListener('click', () => {
-    const response = fetch('/syncdatacentral');
+    const response = fetch('/synccentral');
 });
 
 const syncDataLuzonVisMin = document.querySelector('#sync-data-luzon-vismin');
