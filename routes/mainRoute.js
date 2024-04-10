@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
         testConnection(visMinNodeConnection, 'VisMin Node');
     }
     try {
-        const getAppointments = await CentralNodeAppointments.findAll({ raw:true});
+        const getAppointments = await CentralNodeAppointments.findAll({limit: 1000, raw:true});
         const nodes = `
         Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
         Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
@@ -55,8 +55,8 @@ router.get('/', async (req, res) => {
         nodeStatus.isCentralNodeUp = false;
         console.log('Trying Regional nodes');
         try {
-            const getLuzonAppointments = await LuzonNodeAppointments.findAll({limit: 50, raw: true});
-            const getVisMinAppointments = await VisMinNodeAppointments.findAll({limit: 50, raw: true});
+            const getLuzonAppointments = await LuzonNodeAppointments.findAll({limit: 1000, raw: true});
+            const getVisMinAppointments = await VisMinNodeAppointments.findAll({limit: 1000, raw: true});
             const getAppointments = getLuzonAppointments.concat(getVisMinAppointments);
             const nodes = `
             Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
