@@ -605,6 +605,17 @@ router.get('/results', async (req, res) => {
     if(!nodeStatus.isVisMinNodeUp){
         testConnection(visMinNodeConnection, 'VisMin Node');
     }
+    const nodes = `
+    Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
+    Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
+    VisMin Node: ${nodeStatus.isVisMinNodeUp ? 'Online' : 'Offline'}
+     `
+    const centralNodeQueueInsert = centralQueueInsert.length;
+    const centralNodeQueueUpdate = centralQueueUpdate.length;
+    const luzonNodeQueueInsert = luzonQueueInsert.length;
+    const luzonNodeQueueUpdate = luzonQueueUpdate.length;
+    const visMinNodeQueueInsert = visMinQueueInsert.length;
+    const visMinNodeQueueUpdate = visMinQueueUpdate.length;
 
     if(nodeStatus.isCentralNodeUp){
         try{
@@ -612,6 +623,8 @@ router.get('/results', async (req, res) => {
                 where: searchData,
                 raw: true
             });
+
+            
             if(searchAppointment.length == 0){
                 if(nodeStatus.isLuzonNodeUp) {
                     try{
@@ -627,8 +640,16 @@ router.get('/results', async (req, res) => {
                                 });
                                 res.render('interface', {
                                     title: 'Main Interface',
-                                    appointments: visMinSearchAppointment
+                                    appointments: visMinSearchAppointment,
+                                    nodeStatus: nodes,
+                                    centralNodeQueueInsert: centralNodeQueueInsert,
+                                    centralNodeQueueUpdate: centralNodeQueueUpdate,
+                                    luzonNodeQueueInsert: luzonNodeQueueInsert,
+                                    luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                                    visMinNodeQueueInsert: visMinNodeQueueInsert,
+                                    visMinNodeQueueUpdate: visMinNodeQueueUpdate
                                 });
+                               
                             } catch(visminerr) {
                                 console.log('VisMin Node Connection Lost ', visminerr);
                                 nodeStatus.isLuzonNodeUp = false;
@@ -636,7 +657,14 @@ router.get('/results', async (req, res) => {
                         } else {
                             res.render('interface', {
                                 title: 'Main Interface',
-                                appointments: luzonSearchAppointment
+                                appointments: luzonSearchAppointment,
+                                nodeStatus: nodes,
+                                centralNodeQueueInsert: centralNodeQueueInsert,
+                                centralNodeQueueUpdate: centralNodeQueueUpdate,
+                                luzonNodeQueueInsert: luzonNodeQueueInsert,
+                                luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                                visMinNodeQueueInsert: visMinNodeQueueInsert,
+                                visMinNodeQueueUpdate: visMinNodeQueueUpdate
                             });
                         }
                     } catch(luzonerr) {
@@ -647,7 +675,14 @@ router.get('/results', async (req, res) => {
             } else {
                 res.render('interface', {
                     title: 'Main Interface',
-                    appointments: searchAppointment
+                    appointments: searchAppointment,
+                    nodeStatus: nodes,
+                    centralNodeQueueInsert: centralNodeQueueInsert,
+                    centralNodeQueueUpdate: centralNodeQueueUpdate,
+                    luzonNodeQueueInsert: luzonNodeQueueInsert,
+                    luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                    visMinNodeQueueInsert: visMinNodeQueueInsert,
+                    visMinNodeQueueUpdate: visMinNodeQueueUpdate     
                 });
             }
         } catch(centralerr) {
@@ -667,7 +702,14 @@ router.get('/results', async (req, res) => {
                             });
                             res.render('interface', {
                                 title: 'Main Interface',
-                                appointments: visMinSearchAppointment
+                                appointments: visMinSearchAppointment,
+                                nodeStatus: nodes,
+                                centralNodeQueueInsert: centralNodeQueueInsert,
+                                centralNodeQueueUpdate: centralNodeQueueUpdate,
+                                luzonNodeQueueInsert: luzonNodeQueueInsert,
+                                luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                                visMinNodeQueueInsert: visMinNodeQueueInsert,
+                                visMinNodeQueueUpdate: visMinNodeQueueUpdate
                             });
                         } catch(visminerr) {
                             console.log('VisMin Node Connection Lost ', visminerr);
@@ -676,7 +718,14 @@ router.get('/results', async (req, res) => {
                     } else {
                         res.render('interface', {
                             title: 'Main Interface',
-                            appointments: luzonSearchAppointment
+                            appointments: luzonSearchAppointment,
+                            nodeStatus: nodes,
+                            centralNodeQueueInsert: centralNodeQueueInsert,
+                            centralNodeQueueUpdate: centralNodeQueueUpdate,
+                            luzonNodeQueueInsert: luzonNodeQueueInsert,
+                            luzonNodeQueueUpdate: luzonNodeQueueUpdate,
+                            visMinNodeQueueInsert: visMinNodeQueueInsert,
+                            visMinNodeQueueUpdate: visMinNodeQueueUpdate
                         });
                     }
                 } catch(luzonerr) {
