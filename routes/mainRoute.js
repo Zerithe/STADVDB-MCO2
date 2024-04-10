@@ -489,6 +489,7 @@ router.get('/results', async (req, res) => {
                         res.render('interface', {
                             title: 'Main Interface',
                             appointments: visMinSearchAppointment,
+                            nodeStatus: nodes,
                             centralNodeQueueInsert: centralNodeQueueInsert,
                             centralNodeQueueUpdate: centralNodeQueueUpdate,
                             visMinNodeQueueInsert: visMinNodeQueueInsert,
@@ -497,6 +498,7 @@ router.get('/results', async (req, res) => {
                         if(visMinSearchAppointment.length == 0){
                             res.render('interface', {
                                 title: 'Main Interface',
+                                nodeStatus: nodes,
                                 centralNodeQueueInsert: centralNodeQueueInsert,
                                 centralNodeQueueUpdate: centralNodeQueueUpdate,
                                 visMinNodeQueueInsert: visMinNodeQueueInsert,
@@ -512,6 +514,7 @@ router.get('/results', async (req, res) => {
                 res.render('interface', {
                     title: 'Main Interface',
                     appointments: searchAppointment,
+                    nodeStatus: nodes,
                     centralNodeQueueInsert: centralNodeQueueInsert,
                     centralNodeQueueUpdate: centralNodeQueueUpdate,
                     visMinNodeQueueInsert: visMinNodeQueueInsert,
@@ -530,6 +533,7 @@ router.get('/results', async (req, res) => {
                     res.render('interface', {
                         title: 'Main Interface',
                         appointments: visMinSearchAppointment,
+                        nodeStatus: nodes,
                         centralNodeQueueInsert: centralNodeQueueInsert,
                         centralNodeQueueUpdate: centralNodeQueueUpdate,
                         visMinNodeQueueInsert: visMinNodeQueueInsert,
@@ -538,6 +542,7 @@ router.get('/results', async (req, res) => {
                     if(visMinSearchAppointment.length == 0){
                         res.render('interface', {
                             title: 'Main Interface',
+                            nodeStatus: nodes,
                             centralNodeQueueInsert: centralNodeQueueInsert,
                             centralNodeQueueUpdate: centralNodeQueueUpdate,
                             visMinNodeQueueInsert: visMinNodeQueueInsert,
