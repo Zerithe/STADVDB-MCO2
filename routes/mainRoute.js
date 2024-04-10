@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
         testConnection(luzonNodeConnection, 'Luzon Node');
     }
     try {
-        const getAppointments = await CentralNodeAppointments.findAll({ raw:true});
+        const getAppointments = await CentralNodeAppointments.findAll({limit: 1000, raw:true});
         const nodes = `
         Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
         Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'}
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
         nodeStatus.isCentralNodeUp = false;
         console.log('Trying Regional nodes');
         try {
-            const getLuzonAppointments = await LuzonNodeAppointments.findAll({limit: 50, raw: true});
+            const getLuzonAppointments = await LuzonNodeAppointments.findAll({limit: 1000, raw: true});
             const nodes = `
             Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
             Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
@@ -252,7 +252,6 @@ router.post('/insertdata', async(req, res) => {
             }
             if(location === 'Visayas' || location === 'Mindanao'){
                 console.log('Vis Min Node is not included in this site');
-                res.sendStatus(500);
             }
         } catch(regionalErr){
             console.log('Regional Node connection lost: ', regionalErr);
@@ -396,7 +395,6 @@ router.post('/updatedata', async(req, res) => {
             }
             if(location === 'Visayas' || location === 'Mindanao'){
                 console.log('Vis Min Node is not included in this site');
-                res.sendStatus(500);
             }
         } catch(regionalErr){
             console.log('Regional Node connection lost: ', regionalErr);
