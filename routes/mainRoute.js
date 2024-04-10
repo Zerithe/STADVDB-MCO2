@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
         testConnection(visMinNodeConnection, 'VisMin Node');
     }
     try {
-        const getAppointments = await CentralNodeAppointments.findAll({ limit: 50, raw:true});
+        const getAppointments = await CentralNodeAppointments.findAll({ raw:true});
         const nodes = `
         Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
         VisMin Node: ${nodeStatus.isVisMinNodeUp ? 'Online' : 'Offline'}
