@@ -72,6 +72,7 @@ router.get('/', async (req, res) => {
             res.render('interface', {
                 title: 'Main Interface',
                 appointments: getAppointments,
+                nodeStatus: nodes,
                 centralNodeQueueInsert: centralNodeQueueInsert,
                 centralNodeQueueUpdate: centralNodeQueueUpdate,
                 luzonNodeQueueInsert: luzonNodeQueueInsert,
@@ -223,6 +224,15 @@ router.post('/insertdata', async(req, res) => {
             });
             if(created){
                 console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
+                if(location === 'Luzon' && !nodeStatus.isLuzonNodeUp) {
+                    console.log('Added to luzon queue');
+                    luzonQueueInsert.push(apptid);
+                }
+                if((location === 'Visayas' || location === 'Mindanao') && !nodeStatus.isVisMinNodeUp) {
+                    console.log('Added to vismin queue');
+                    visMinQueueInsert.push(apptid);
+                }
+                
             } else {
                  console.log('Appointment already in Central Node', insertCentralAppointment);
             }
@@ -305,9 +315,11 @@ router.post('/insertdata', async(req, res) => {
         } catch(regionalErr){
             console.log('Regional Node connection lost: ', regionalErr);
             if(location === 'Luzon') {
+                console.log('Added to luzon queue');
                 nodeStatus.isLuzonNodeUp = false;
                 luzonQueueInsert.push(apptid);
-            } else {
+            } else if (location === 'Visayas' || location === 'Mindanao')  {
+                console.log('Added to vismin queue');
                 nodeStatus.isVisMinNodeUp = false;
                 visMinQueueInsert.push(apptid);
             }
@@ -316,6 +328,7 @@ router.post('/insertdata', async(req, res) => {
     } catch(centralErr) {
         console.log('Central Node Connection Lost ', centralErr);
         nodeStatus.isCentralNodeUp = false;
+        console.log('Added to central queue ');
         centralQueueInsert.push(apptid);
         console.log('Trying Regional nodes');
         try {
@@ -974,7 +987,7 @@ router.get('/importcsvvismin', async (req, res) => {
     }
 });
 
-router.get('/synccentral', async (req, res) => {
+router.get('/syncdatacentral', async (req, res) => {
     testConnection(centralNodeConnection, 'Central Node');
     testConnection(luzonNodeConnection, 'Luzon Node');
     testConnection(visMinNodeConnection, 'VisMin Node');
