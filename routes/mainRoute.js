@@ -57,6 +57,7 @@ router.get('/', async (req, res) => {
             res.render('interface', {
                 title: 'Main Interface',
                 appointments: getVisMinAppointments,
+                nodeStatus: nodes,
                 centralNodeQueueInsert: centralNodeQueueInsert,
                 centralNodeQueueUpdate: centralNodeQueueUpdate,
                 visMinNodeQueueInsert: visMinNodeQueueInsert,
@@ -202,6 +203,12 @@ router.post('/insertdata', async(req, res) => {
             });
             if(created){
                 console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
+
+                if((location === 'Visayas' || location === 'Mindanao') && !nodeStatus.isVisMinNodeUp) {
+                    console.log('Added to vismin queue');
+                    visMinQueueInsert.push(apptid);
+                }
+                
             } else {
                  console.log('Appointment already in Central Node', insertCentralAppointment);
             }
@@ -457,6 +464,14 @@ router.get('/results', async (req, res) => {
     if(!nodeStatus.isVisMinNodeUp){
         testConnection(visMinNodeConnection, 'VisMin Node');
     }
+    const nodes = `
+    Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
+    VisMin Node: ${nodeStatus.isVisMinNodeUp ? 'Online' : 'Offline'}
+     `
+    const centralNodeQueueInsert = centralQueueInsert.length;
+    const centralNodeQueueUpdate = centralQueueUpdate.length;
+    const visMinNodeQueueInsert = visMinQueueInsert.length;
+    const visMinNodeQueueUpdate = visMinQueueUpdate.length;
 
     if(nodeStatus.isCentralNodeUp){
         try{
@@ -473,11 +488,19 @@ router.get('/results', async (req, res) => {
                         });
                         res.render('interface', {
                             title: 'Main Interface',
-                            appointments: visMinSearchAppointment
+                            appointments: visMinSearchAppointment,
+                            centralNodeQueueInsert: centralNodeQueueInsert,
+                            centralNodeQueueUpdate: centralNodeQueueUpdate,
+                            visMinNodeQueueInsert: visMinNodeQueueInsert,
+                            visMinNodeQueueUpdate: visMinNodeQueueUpdate
                         });
                         if(visMinSearchAppointment.length == 0){
                             res.render('interface', {
-                                title: 'Main Interface'
+                                title: 'Main Interface',
+                                centralNodeQueueInsert: centralNodeQueueInsert,
+                                centralNodeQueueUpdate: centralNodeQueueUpdate,
+                                visMinNodeQueueInsert: visMinNodeQueueInsert,
+                                visMinNodeQueueUpdate: visMinNodeQueueUpdate
                             });
                         }
                     } catch(visminerr) {
@@ -488,7 +511,11 @@ router.get('/results', async (req, res) => {
             } else {
                 res.render('interface', {
                     title: 'Main Interface',
-                    appointments: searchAppointment
+                    appointments: searchAppointment,
+                    centralNodeQueueInsert: centralNodeQueueInsert,
+                    centralNodeQueueUpdate: centralNodeQueueUpdate,
+                    visMinNodeQueueInsert: visMinNodeQueueInsert,
+                    visMinNodeQueueUpdate: visMinNodeQueueUpdate
                 });
             }
         } catch(centralerr) {
@@ -502,11 +529,19 @@ router.get('/results', async (req, res) => {
                     });
                     res.render('interface', {
                         title: 'Main Interface',
-                        appointments: visMinSearchAppointment
+                        appointments: visMinSearchAppointment,
+                        centralNodeQueueInsert: centralNodeQueueInsert,
+                        centralNodeQueueUpdate: centralNodeQueueUpdate,
+                        visMinNodeQueueInsert: visMinNodeQueueInsert,
+                        visMinNodeQueueUpdate: visMinNodeQueueUpdate
                     });
                     if(visMinSearchAppointment.length == 0){
                         res.render('interface', {
-                            title: 'Main Interface'
+                            title: 'Main Interface',
+                            centralNodeQueueInsert: centralNodeQueueInsert,
+                            centralNodeQueueUpdate: centralNodeQueueUpdate,
+                            visMinNodeQueueInsert: visMinNodeQueueInsert,
+                            visMinNodeQueueUpdate: visMinNodeQueueUpdate
                         });
                     }
                 } catch(visminerr) {
