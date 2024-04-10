@@ -269,6 +269,10 @@ countLocationBtn.addEventListener('click', async () => {
         data.forEach(report => {
             reportResults.innerHTML += `${report.Location}: ${report.apptidCount} <br>`;
         });
+    } else {
+        const reportResults = document.querySelector('#report-results');
+        reportResults.innerHTML = '';
+        reportResults.innerHTML = 'ERROR GETTING FROM NODES';
     }
 });
 
@@ -369,7 +373,15 @@ importCsvVisMinBtn.addEventListener('click', async () => {
 });
 
 
+const syncDataCentral = document.querySelector('#sync-data-central');
+syncDataCentral.addEventListener('click', () => {
+    const response = fetch('/syncdatacentral');
+});
 
+const syncDataLuzonVisMin = document.querySelector('#sync-data-luzon-vismin');
+syncDataLuzonVisMin.addEventListener('click', () => {
+    const response = fetch('/syncluzonvismin');
+});
 
 
 
