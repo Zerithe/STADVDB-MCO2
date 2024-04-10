@@ -149,7 +149,7 @@ updateForm.addEventListener('submit', async function(event) {
         });
         if(response.status == 200){
             const result = document.querySelector('#update-results');
-            alert('Succesfully Inserted Appointment');
+            alert('Succesfully Updated Appointment');
             location.reload();
         }
     } catch(err) {
