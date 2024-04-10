@@ -80,15 +80,15 @@ insertForm.addEventListener('submit', async function(event) {
         if(response.status == 200){
             const result = document.querySelector('#insert-results');
             alert('Succesfully Inserted Appointment');
-            location.reload;
+            location.reload();
         } else {
             alert('Error Inserting Appointment');
-            location.reload;
+            location.reload();
         }
     } catch(err) {
         console.log('Error Inserting Appointment', err.message);
         alert('Error Inserting Appointment');
-        location.reload;
+        location.reload();
     }
 });
 
@@ -149,8 +149,8 @@ updateForm.addEventListener('submit', async function(event) {
         });
         if(response.status == 200){
             const result = document.querySelector('#update-results');
-            alert('Succesfully Inserted Appointment');
-            location.reload;
+            alert('Succesfully Updated Appointment');
+            location.reload();
         }
     } catch(err) {
         console.log('Error Updating Appointment', err.message);
