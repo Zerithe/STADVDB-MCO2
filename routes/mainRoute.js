@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
         testConnection(luzonNodeConnection, 'Luzon Node');
     }
     try {
-        const getAppointments = await CentralNodeAppointments.findAll({ limit: 50, raw:true});
+        const getAppointments = await CentralNodeAppointments.findAll({ raw:true});
         const nodes = `
         Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
         Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'}
