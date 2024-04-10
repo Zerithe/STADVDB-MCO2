@@ -353,26 +353,6 @@ importCsvLuzonBtn.addEventListener('click', async () => {
     }
 });
 
-const importCsvVisMinBtn = document.querySelector('#import-csv-vismin');
-importCsvVisMinBtn.addEventListener('click', async () => {
-    try {
-        const loadingContent = document.querySelector('#loading-csv');
-        loadingContent.innerHTML = 'WAIT FOR CSV TO IMPORT. DO NOT REFRESH PAGE OR USE ANY FUNCTIONS. WAIT FOR PAGE TO REFRESH.';
-        const response = await fetch('/importcsvvismin', {
-            method: 'GET'
-        });
-        if(response.ok){
-            location.reload();
-        } else {
-            alert('CSV ALREADY IMPORTED');
-            location.reload();
-        }
-    } catch(err){
-        console.log(err);
-    }
-});
-
-
 const syncDataCentral = document.querySelector('#sync-data-central');
 syncDataCentral.addEventListener('click', () => {
     const response = fetch('/syncdatacentral');

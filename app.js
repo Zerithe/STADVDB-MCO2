@@ -10,12 +10,10 @@ import { CentralNodeAppointments } from './DBConn.js';
 //import { localConnection } from './DBConn.js';
 import { centralNodeConnection } from './DBConn.js';
 import { luzonNodeConnection } from './DBConn.js';
-import { visMinNodeConnection } from './DBConn.js';
 
 export const nodeStatus = {
   isCentralNodeUp: false,
-  isLuzonNodeUp: false,
-  isVisMinNodeUp: false
+  isLuzonNodeUp: false
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -46,9 +44,6 @@ export async function testConnection(sequelizeInstance, nodeName) {
     } else if(nodeName === 'Luzon Node'){
       await luzonNodeConnection.sync();
       nodeStatus.isLuzonNodeUp = true;
-    } else if(nodeName === 'VisMin Node'){
-      await visMinNodeConnection.sync();
-      nodeStatus.isVisMinNodeUp = true;
     }
   } catch (error) {
     console.error(`Unable to connect to the ${nodeName}:`, error);
@@ -56,15 +51,12 @@ export async function testConnection(sequelizeInstance, nodeName) {
       nodeStatus.isCentralNodeUp = false;
     } else if(nodeName === 'Luzon Node'){
       nodeStatus.isLuzonNodeUp = false;
-    } else if(nodeName === 'VisMin Node'){
-      nodeStatus.isVisMinNodeUp = false;
     }
   }
 }
 
 testConnection(centralNodeConnection, 'Central Node');
 testConnection(luzonNodeConnection, 'Luzon Node');
-testConnection(visMinNodeConnection, 'VisMin Node');
 
 /*
 //initialize database

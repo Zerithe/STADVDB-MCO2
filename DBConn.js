@@ -17,14 +17,6 @@ export const luzonNodeConnection = new Sequelize('luzon_appointments', 'root', '
     logging: console.log()
 });
 
-//connects to VisMin node
-export const visMinNodeConnection = new Sequelize('visayas_mindanao_appointments', 'root', 'root', {
-    host: 'ccscloud.dlsu.edu.ph',
-    port: '20017',
-    dialect: 'mysql',
-    logging: console.log()
-});
-
   export const CentralNodeAppointments = centralNodeConnection.define('appointments', {
     pxid: { type: Sequelize.STRING, allowNull: true },
     clinicid: { type: Sequelize.STRING, allowNull: true },
@@ -46,26 +38,6 @@ export const visMinNodeConnection = new Sequelize('visayas_mindanao_appointments
   });
 
   export const LuzonNodeAppointments = luzonNodeConnection.define('appointments', {
-    pxid: { type: Sequelize.STRING, allowNull: true },
-    clinicid: { type: Sequelize.STRING, allowNull: true },
-    doctorid: { type: Sequelize.STRING, allowNull: true },
-    apptid: { type: Sequelize.STRING, allowNull: true,  primaryKey:true },
-    status: { type: Sequelize.STRING, allowNull: true },
-    TimeQueued: { type: Sequelize.DATE(6), allowNull: true },
-    QueueDate: { type: Sequelize.DATE, allowNull: true },
-    StartTime: { type: Sequelize.DATE, allowNull: true },
-    EndTime: { type: Sequelize.DATE, allowNull: true },
-    type: { type: Sequelize.STRING, allowNull: true },
-    Virtual: { type: Sequelize.BOOLEAN, allowNull: true },
-    mainspecialty: { type: Sequelize.STRING, allowNull: true },
-    hospitalname: { type: Sequelize.STRING, allowNull: true },
-    RegionName: { type: Sequelize.STRING, allowNull: true },
-    Location: { type: Sequelize.STRING, allowNull: true }
-  }, {
-    tableName: 'appointments' // Make sure this matches your actual table name
-  });
-
-  export const VisMinNodeAppointments = visMinNodeConnection.define('appointments', {
     pxid: { type: Sequelize.STRING, allowNull: true },
     clinicid: { type: Sequelize.STRING, allowNull: true },
     doctorid: { type: Sequelize.STRING, allowNull: true },
