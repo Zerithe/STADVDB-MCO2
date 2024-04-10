@@ -9,12 +9,10 @@ import { CentralNodeAppointments } from './DBConn.js';
 //comment out which node you dont need
 //import { localConnection } from './DBConn.js';
 import { centralNodeConnection } from './DBConn.js';
-import { luzonNodeConnection } from './DBConn.js';
 import { visMinNodeConnection } from './DBConn.js';
 
 export const nodeStatus = {
   isCentralNodeUp: false,
-  isLuzonNodeUp: false,
   isVisMinNodeUp: false
 }
 
@@ -43,9 +41,6 @@ export async function testConnection(sequelizeInstance, nodeName) {
     if(nodeName === 'Central Node'){
       await centralNodeConnection.sync();
       nodeStatus.isCentralNodeUp = true;
-    } else if(nodeName === 'Luzon Node'){
-      await luzonNodeConnection.sync();
-      nodeStatus.isLuzonNodeUp = true;
     } else if(nodeName === 'VisMin Node'){
       await visMinNodeConnection.sync();
       nodeStatus.isVisMinNodeUp = true;
@@ -54,8 +49,6 @@ export async function testConnection(sequelizeInstance, nodeName) {
     console.error(`Unable to connect to the ${nodeName}:`, error);
     if(nodeName === 'Central Node'){
       nodeStatus.isCentralNodeUp = false;
-    } else if(nodeName === 'Luzon Node'){
-      nodeStatus.isLuzonNodeUp = false;
     } else if(nodeName === 'VisMin Node'){
       nodeStatus.isVisMinNodeUp = false;
     }
@@ -63,7 +56,6 @@ export async function testConnection(sequelizeInstance, nodeName) {
 }
 
 testConnection(centralNodeConnection, 'Central Node');
-testConnection(luzonNodeConnection, 'Luzon Node');
 testConnection(visMinNodeConnection, 'VisMin Node');
 
 /*
