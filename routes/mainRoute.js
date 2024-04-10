@@ -57,6 +57,7 @@ router.get('/', async (req, res) => {
             res.render('interface', {
                 title: 'Main Interface',
                 appointments: getLuzonAppointments,
+                nodeStatus: nodes,
                 centralNodeQueueInsert: centralNodeQueueInsert,
                 centralNodeQueueUpdate: centralNodeQueueUpdate,
                 luzonNodeQueueInsert: luzonNodeQueueInsert,
@@ -202,6 +203,10 @@ router.post('/insertdata', async(req, res) => {
             });
             if(created){
                 console.log('Successfully inserted appointment into central node ', insertCentralAppointment);
+                if(location === 'Luzon' && !nodeStatus.isLuzonNodeUp) {
+                    console.log('Added to luzon queue');
+                    luzonQueueInsert.push(apptid);
+                }
             } else {
                  console.log('Appointment already in Central Node', insertCentralAppointment);
             }
@@ -457,6 +462,14 @@ router.get('/results', async (req, res) => {
     if(!nodeStatus.isLuzonNodeUp){
         testConnection(luzonNodeConnection, 'Luzon Node');
     }
+    const nodes = `
+    Central Node: ${nodeStatus.isCentralNodeUp ? 'Online' : 'Offline'} |
+    Luzon Node: ${nodeStatus.isLuzonNodeUp ? 'Online' : 'Offline'} |
+     `
+    const centralNodeQueueInsert = centralQueueInsert.length;
+    const centralNodeQueueUpdate = centralQueueUpdate.length;
+    const luzonNodeQueueInsert = luzonQueueInsert.length;
+    const luzonNodeQueueUpdate = luzonQueueUpdate.length;
 
     if(nodeStatus.isCentralNodeUp){
         try{
@@ -473,7 +486,12 @@ router.get('/results', async (req, res) => {
                         });
                         res.render('interface', {
                             title: 'Main Interface',
-                            appointments: luzonSearchAppointment
+                            appointments: luzonSearchAppointment,
+                            nodeStatus: nodes,
+                            centralNodeQueueInsert: centralNodeQueueInsert,
+                            centralNodeQueueUpdate: centralNodeQueueUpdate,
+                            luzonNodeQueueInsert: luzonNodeQueueInsert,
+                            luzonNodeQueueUpdate: luzonNodeQueueUpdate, 
                         });
                     } catch(luzonerr) {
                         console.log('Luzon Node Connection Lost ', luzonerr);
@@ -483,7 +501,12 @@ router.get('/results', async (req, res) => {
             } else {
                 res.render('interface', {
                     title: 'Main Interface',
-                    appointments: searchAppointment
+                    appointments: searchAppointment,
+                    nodeStatus: nodes,
+                    centralNodeQueueInsert: centralNodeQueueInsert,
+                    centralNodeQueueUpdate: centralNodeQueueUpdate,
+                    luzonNodeQueueInsert: luzonNodeQueueInsert,
+                    luzonNodeQueueUpdate: luzonNodeQueueUpdate,
                 });
             }
         } catch(centralerr) {
@@ -497,7 +520,12 @@ router.get('/results', async (req, res) => {
                     });
                     res.render('interface', {
                         title: 'Main Interface',
-                        appointments: luzonSearchAppointment
+                        appointments: luzonSearchAppointment,
+                        nodeStatus: nodes,
+                        centralNodeQueueInsert: centralNodeQueueInsert,
+                        centralNodeQueueUpdate: centralNodeQueueUpdate,
+                        luzonNodeQueueInsert: luzonNodeQueueInsert,
+                        luzonNodeQueueUpdate: luzonNodeQueueUpdate,
                     });
                 } catch(luzonerr) {
                     console.log('Luzon Node Connection Lost ', luzonerr);
