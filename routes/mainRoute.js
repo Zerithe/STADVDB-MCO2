@@ -745,6 +745,8 @@ router.get('/importcsvvismin', async (req, res) => {
 });
 
 router.get('/synccentral', async (req, res) => {
+    testConnection(centralNodeConnection, 'Central Node');
+    testConnection(visMinNodeConnection, 'VisMin Node');
     if(nodeStatus.isCentralNodeUp && nodeStatus.isVisMinNodeUp){
         if(centralQueueInsert != 0) {
             centralQueueInsert.forEach( async apptid => {
@@ -755,21 +757,21 @@ router.get('/synccentral', async (req, res) => {
                     });
                     if(visMinSearch){
                         const formattedAppointment = {
-                            apptid: appointment.apptid,
-                            pxid: appointment.pxid,
-                            clinicid: appointment.clinicid,
-                            doctorid: appointment.doctorid,
-                            hospitalname: appointment.hospitalname,
-                            mainspecialty: appointment.mainspecialty,
-                            RegionName: appointment.RegionName,
-                            status: appointment.status,
-                            TimeQueued: appointment.TimeQueued,
-                            QueueDate: appointment.QueueDate,
-                            StartTime: appointment.StartTime,
-                            EndTime: appointment.EndTime,
-                            type: appointment.type,
-                            Virtual: appointment.Virtual,
-                            Location: appointment.Location
+                            apptid: visMinSearch.apptid,
+                            pxid: visMinSearch.pxid,
+                            clinicid: visMinSearch.clinicid,
+                            doctorid: visMinSearch.doctorid,
+                            hospitalname: visMinSearch.hospitalname,
+                            mainspecialty: visMinSearch.mainspecialty,
+                            RegionName: visMinSearch.RegionName,
+                            status: visMinSearch.status,
+                            TimeQueued: visMinSearch.TimeQueued,
+                            QueueDate: visMinSearch.QueueDate,
+                            StartTime: visMinSearch.StartTime,
+                            EndTime: visMinSearch.EndTime,
+                            type: visMinSearch.type,
+                            Virtual: visMinSearch.Virtual,
+                            Location: visMinSearch.Location
                         }
                         if(formattedAppointment.TimeQueued){
                             formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
@@ -805,21 +807,21 @@ router.get('/synccentral', async (req, res) => {
                     });
                     if(visMinSearch){
                         const formattedAppointment = {
-                            apptid: appointment.apptid,
-                            pxid: appointment.pxid,
-                            clinicid: appointment.clinicid,
-                            doctorid: appointment.doctorid,
-                            hospitalname: appointment.hospitalname,
-                            mainspecialty: appointment.mainspecialty,
-                            RegionName: appointment.RegionName,
-                            status: appointment.status,
-                            TimeQueued: appointment.TimeQueued,
-                            QueueDate: appointment.QueueDate,
-                            StartTime: appointment.StartTime,
-                            EndTime: appointment.EndTime,
-                            type: appointment.type,
-                            Virtual: appointment.Virtual,
-                            Location: appointment.Location
+                            apptid: visMinSearch.apptid,
+                            pxid: visMinSearch.pxid,
+                            clinicid: visMinSearch.clinicid,
+                            doctorid: visMinSearch.doctorid,
+                            hospitalname: visMinSearch.hospitalname,
+                            mainspecialty: visMinSearch.mainspecialty,
+                            RegionName: visMinSearch.RegionName,
+                            status: visMinSearch.status,
+                            TimeQueued: visMinSearch.TimeQueued,
+                            QueueDate: visMinSearch.QueueDate,
+                            StartTime: visMinSearch.StartTime,
+                            EndTime: visMinSearch.EndTime,
+                            type: visMinSearch.type,
+                            Virtual: visMinSearch.Virtual,
+                            Location: visMinSearch.Location
                         }
                         if(formattedAppointment.TimeQueued){
                             formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
@@ -854,6 +856,8 @@ router.get('/synccentral', async (req, res) => {
 });
 
 router.get('/syncluzonvismin', async (req, res) => {
+    testConnection(centralNodeConnection, 'Central Node');
+    testConnection(visMinNodeConnection, 'VisMin Node');
     if(nodeStatus.isCentralNodeUp && nodeStatus.isVisMinNodeUp){
         if(visMinQueueInsert != 0) {
             visMinQueueInsert.forEach( async apptid => {
@@ -864,21 +868,21 @@ router.get('/syncluzonvismin', async (req, res) => {
                     });
                     if(centralSearch){
                         const formattedAppointment = {
-                            apptid: appointment.apptid,
-                            pxid: appointment.pxid,
-                            clinicid: appointment.clinicid,
-                            doctorid: appointment.doctorid,
-                            hospitalname: appointment.hospitalname,
-                            mainspecialty: appointment.mainspecialty,
-                            RegionName: appointment.RegionName,
-                            status: appointment.status,
-                            TimeQueued: appointment.TimeQueued,
-                            QueueDate: appointment.QueueDate,
-                            StartTime: appointment.StartTime,
-                            EndTime: appointment.EndTime,
-                            type: appointment.type,
-                            Virtual: appointment.Virtual,
-                            Location: appointment.Location
+                            apptid: centralSearch.apptid,
+                            pxid: centralSearch.pxid,
+                            clinicid: centralSearch.clinicid,
+                            doctorid: centralSearch.doctorid,
+                            hospitalname: centralSearch.hospitalname,
+                            mainspecialty: centralSearch.mainspecialty,
+                            RegionName: centralSearch.RegionName,
+                            status: centralSearch.status,
+                            TimeQueued: centralSearch.TimeQueued,
+                            QueueDate: centralSearch.QueueDate,
+                            StartTime: centralSearch.StartTime,
+                            EndTime: centralSearch.EndTime,
+                            type: centralSearch.type,
+                            Virtual: centralSearch.Virtual,
+                            Location: centralSearch.Location
                         }
                         if(formattedAppointment.TimeQueued){
                             formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
@@ -913,21 +917,21 @@ router.get('/syncluzonvismin', async (req, res) => {
                     });
                     if(centralSearch){
                         const formattedAppointment = {
-                            apptid: appointment.apptid,
-                            pxid: appointment.pxid,
-                            clinicid: appointment.clinicid,
-                            doctorid: appointment.doctorid,
-                            hospitalname: appointment.hospitalname,
-                            mainspecialty: appointment.mainspecialty,
-                            RegionName: appointment.RegionName,
-                            status: appointment.status,
-                            TimeQueued: appointment.TimeQueued,
-                            QueueDate: appointment.QueueDate,
-                            StartTime: appointment.StartTime,
-                            EndTime: appointment.EndTime,
-                            type: appointment.type,
-                            Virtual: appointment.Virtual,
-                            Location: appointment.Location
+                            apptid: centralSearch.apptid,
+                            pxid: centralSearch.pxid,
+                            clinicid: centralSearch.clinicid,
+                            doctorid: centralSearch.doctorid,
+                            hospitalname: centralSearch.hospitalname,
+                            mainspecialty: centralSearch.mainspecialty,
+                            RegionName: centralSearch.RegionName,
+                            status: centralSearch.status,
+                            TimeQueued: centralSearch.TimeQueued,
+                            QueueDate: centralSearch.QueueDate,
+                            StartTime: centralSearch.StartTime,
+                            EndTime: centralSearch.EndTime,
+                            type: centralSearch.type,
+                            Virtual: centralSearch.Virtual,
+                            Location: centralSearch.Location
                         }
                         if(formattedAppointment.TimeQueued){
                             formattedAppointment.TimeQueued = formattedAppointment.TimeQueued.toISOString().slice(0, 16);
