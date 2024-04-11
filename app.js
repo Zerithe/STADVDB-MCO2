@@ -16,6 +16,8 @@ export const nodeStatus = {
   isVisMinNodeUp: false
 }
 
+const port = process.env.PORT || 3000
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
@@ -91,7 +93,7 @@ async function initializeDB(){
 
 //initializeDB();
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(port, () => {
     console.log('server is now listening');
 });
 
